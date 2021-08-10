@@ -1,0 +1,36 @@
+.pagePagination
+  transition: all 0.15s ease-in-out
+  list-style: none
+  text-align: center
+  font-size: 0.75rem
+  display: block
+  margin: 2rem auto 0 auto
+  padding: 0
+  width: 100%
+
+  button,
+  li
+    display: inline-block
+
+  button
+    font-weight: bold
+    background: none
+    padding: 0.5rem 1rem
+    margin: 0 0 0 -1px !important
+    cursor: pointer
+
+    &.active
+      background: theme('colors.primary')
+      border: 1px solid theme('colors.primary')
+      color: #fff
+
+    &:hover
+      opacity: 0.5
+
+.paginationContent
+  font-size: 1.25rem
+  color: black
+
+.pagePaginationButton
+  &:disabled
+    pointer-events: none

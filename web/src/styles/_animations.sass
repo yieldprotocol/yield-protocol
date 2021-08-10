@@ -1,0 +1,98 @@
+@keyframes bottom-up
+  0%
+    transform: translate3d(0, 100%, 0rem)
+  100%
+    transform: translate3d(0, 0, 0rem)
+
+@keyframes bottom-down
+  0%
+    transform: translate3d(0, 0, 0rem)
+  50%
+    transform: translate3d(0, 0, 0rem)
+  100%
+    transform: translate3d(0, 100%, 0rem)
+
+@keyframes bounce-h
+  0%,
+  100%,
+  20%,
+  50%,
+  80%
+    transform: translateX(0)
+  40%
+    transform: translateX(7px)
+  60%
+    transform: translateX(5px)
+
+@keyframes bounce
+  0%,
+  100%,
+  20%,
+  50%,
+  80%
+    transform: translateY(0)
+  40%
+    transform: translateY(-10px)
+  60%
+    transform: translateY(-5px)
+
+@keyframes rotate-cc
+  0%
+    transform: rotateZ(360deg)
+  100%
+    transform: rotateZ(0deg)
+
+@keyframes rotate
+  0%
+    transform: rotateZ(0deg)
+  100%
+    transform: rotateZ(360deg)
+
+@keyframes float
+  0%
+    transform: translate3d(0, 0, 0)
+  50%
+    transform: translate3d(0, -20%, 0)
+  0%
+    transform: translate3d(0, 0, 0)
+
+@keyframes throb
+  0%
+    transform: translate3d(0, 0, 0) rotateZ(0)
+  50%
+    transform: translate3d(0, -50%, 0) rotateZ(360deg)
+  100%
+    transform: translate3d(0, 0, 0) rotateZ(0)
+
+@keyframes gradient-button
+	0%
+		background-position: 0% 50%
+	50%
+		background-position: 100% 50%
+	100%
+		background-position: 0% 50%
+
+/* Animation classes */
+.animate-up
+  animation: bottom-up 0.5s normal forwards ease-in-out 4s
+
+.animate-down
+  animation: bottom-down 0.5s normal forwards ease-in-out
+
+.bounce-h
+  animation: bounce-h 2s infinite 2s
+
+.bounce
+  animation: bounce 2s infinite 2s
+
+.rotate-cc
+  animation: rotate-cc 2s infinite 2s
+
+.rotate
+  animation: rotate 4s infinite 2s
+
+.float
+  animation: float 2s infinite
+
+.throb
+  animation: throb 2s infinite
