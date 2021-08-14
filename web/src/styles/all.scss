@@ -144,41 +144,59 @@ figure {
   max-height: 64rem;
 }
 
-.app {
-  display: grid;
-  grid-template-columns: 1fr 0.5fr;
-  grid-template-rows: 1fr;
-  grid-column-gap: 1rem;
-  grid-row-gap: 1rem;
-  align-items: center;
+.select {
+  padding: 0;
+  border: none;
 
-  @media screen and (max-width: 48rem) {
-    grid-template-columns: none;
-    grid-template-rows: repeat(2 1fr);
-  }
+  div {
+    background: transparent;
+    transition: all 0.15s ease-in-out;
+    color: black;
 
-  .select {
-    div {
-      background: transparent;
-      color: white;
+    &[class*='-ValueContainer'] {
+      padding: 0;
+      border: none;
+    }
 
-      &[class*='-control'] {
-        border: 2px solid theme('colors.indigo.700');
-      }
+    &[class*='-singleValue'] {
+      padding: 0;
+      margin: 0;
 
-      &[class*='-menu'] {
-        text-align: left;
-        background: theme('colors.indigo.700');
-      }
-
-      &[class*='-option'] {
-        border-bottom: 2px solid rgba(255, 255, 255, 0.125);
-        transition: all 0.15s ease-in-out;
+      &:hover,
+      &:active,
+      &:focus {
+        background: none;
         cursor: pointer;
+        border: none;
+        color: theme('colors.indigo.600');
       }
+    }
+
+    &[class*='-control'] {
+      padding: 0;
+      border: none;
+    }
+
+    &[class*='-menu'] {
+      border-radius: 0;
+      text-align: left;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.125);
+      background: white;
+      z-index: 2;
+    }
+
+    &[class*='-option'] {
+      border-bottom: 2px solid rgba(255, 255, 255, 0.125);
+      transition: all 0.15s ease-in-out;
+      background: white;
+      font-size: 1.5rem;
+      padding: 0.8125rem 1.5rem;
+      cursor: pointer;
 
       &:hover {
-        background: theme('colors.indigo.600');
+        background: none;
+        cursor: pointer;
+        color: theme('colors.indigo.600');
       }
 
       &:last-of-type {
@@ -190,8 +208,7 @@ figure {
 
 .react-tabs {
   &__tab {
-    border-radius: 4rem;
-    font-weight: bold;
+    font-weight: 500;
     transition: all 0.15s ease-in-out;
     padding: 0.5rem 1rem;
     cursor: pointer;
@@ -201,7 +218,8 @@ figure {
     }
 
     &--selected {
-      background: theme('colors.indigo.700');
+      background: black;
+      color: white;
     }
   }
 

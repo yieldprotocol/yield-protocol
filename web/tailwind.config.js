@@ -12,7 +12,7 @@ module.exports = {
         darkPurple: '#14043a',
         primary: '#5641ff',
         secondary: '#A3FFE3',
-        offwhite: '#F7F7FA',
+        offwhite: '#F6F6F4',
         yellow: 'F7D958',
       },
     },

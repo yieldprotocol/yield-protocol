@@ -11,7 +11,10 @@ const Header = class extends React.Component {
 
     this.state = {
       menuOpen: false,
+      isTop: false,
     }
+
+    this.isTopChecker = this.isTopChecker.bind(this)
   }
 
   isTopChecker() {

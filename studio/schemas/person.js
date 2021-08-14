@@ -65,5 +65,5 @@ export default {
       subtitle: "title",
       media: "image"
     }
-  }
+  },
 };

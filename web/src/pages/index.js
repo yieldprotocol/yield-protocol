@@ -6,11 +6,13 @@ import { X } from 'react-feather'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import Select from 'react-select'
 
+import { logEvent } from '../utils/analytics'
+
 import { buildImageObj } from '../lib/helpers'
 import { imageUrlFor } from '../lib/image-url'
 
 import GraphQLErrorList from '../components/graphql-error-list'
-import ContainerFull from '../components/container-full'
+import Button from '../components/button'
 import SEO from '../components/seo'
 
 import Layout from '../containers/layout'
@@ -29,7 +31,7 @@ const fyDai = [
   'function mature()',
   'function name() view returns (string)',
   'function balanceOf(address) view returns (uint256)',
-  'function redeem(address, address, uint256)'
+  'function redeem(address, address, uint256)',
 ]
 
 const classLinks =
@@ -38,30 +40,30 @@ const classLinks =
 const borrow = {
   heading: 'Borrow today & pay fixed interest.',
   type: 'borrow',
-  cta: 'Borrow'
+  cta: 'Borrow',
 }
 
 const lend = {
   heading: 'Lend today & earn fixed interest.',
   type: 'lend',
-  cta: 'Lend'
+  cta: 'Lend',
 }
 
 const series = [
   {
     address: '0x8EcC94a91b5CF03927f5eb8c60ABbDf48F82b0b3',
     value: '1633046399',
-    label: 'September 2021 • APR:',
+    label: 'September 2021',
     date: 'September 2021',
-    apr: 2.84
+    apr: 2.84,
   },
   {
     address: '0x5591f644B377eD784e558D4BE1bbA78f5a26bdCd',
     value: '1640995199',
-    label: 'December 2021 • APR:',
+    label: 'December 2021',
     date: 'December 2021',
-    apr: 3.84
-  }
+    apr: 3.84,
+  },
 ]
 
 export const query = graphql`
@@ -97,36 +99,59 @@ export const query = graphql`
       id
       title
       heading
-      _rawBody
+      body
       mainImage {
         asset {
           _id
         }
       }
-      _rawAudit
       ctaPrimary
       ctaPrimaryURL
       ctaSecondary
       ctaSecondaryURL
-      stats {
-        stat
+      borrowersText {
         title
         description
-        url
-        image {
-          asset {
-            _id
-          }
+      }
+      lendersText {
+        title
+        description
+      }
+      backersHeading
+      backers {
+        asset {
+          _id
         }
       }
-      showBlog
-      mainCTA
-      mainCTAURL
+    }
+
+    people: allSanityPerson(
+      sort: { fields: _updatedAt }
+      filter: { slug: { current: { ne: null } } }
+    ) {
+      edges {
+        node {
+          id
+          name
+          title
+          _rawBio
+          image {
+            asset {
+              _id
+            }
+          }
+          slug {
+            current
+          }
+          twitter
+          linkedin
+        }
+      }
     }
   }
 `
 
-const IndexPage = props => {
+const IndexPage = (props) => {
   const { data, errors } = props
 
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -144,7 +169,7 @@ const IndexPage = props => {
       case 'updateRates':
         return {
           ...state,
-          seriesRates: action.payload
+          seriesRates: action.payload,
         }
       default:
         return state
@@ -156,7 +181,7 @@ const IndexPage = props => {
 
   // Set state for yield
   const initState = {
-    seriesRates: new Map()
+    seriesRates: new Map(),
   }
 
   const [state, dispatch] = React.useReducer(reducer, initState)
@@ -172,7 +197,7 @@ const IndexPage = props => {
       provider = ethers.getDefaultProvider('homestead', {
         etherscan: process.env.GATSBY_ETHERSCAN_API_KEY,
         infura: process.env.GATSBY_INFURA_PROJECT_ID,
-        alchemy: process.env.GATSBY_ALCHEMY_API_KEY
+        alchemy: process.env.GATSBY_ALCHEMY_API_KEY,
       })
     }
   }
@@ -183,9 +208,9 @@ const IndexPage = props => {
   }
 
   // Get the yield market rates for a particular set of series
-  const _getRates = async series => {
+  const _getRates = async (series) => {
     const ratesData = await Promise.allSettled(
-      series.map(async x => {
+      series.map(async (x) => {
         const contract = new ethers.Contract(x.address, Pool.abi, provider)
 
         const fyDaiAddress = await contract.fyDai()
@@ -205,13 +230,13 @@ const IndexPage = props => {
           address: x.address,
           maturity: parsedfyDaiMaturity,
           isMature: parsedfyDaiMaturity < Math.round(new Date().getTime() / 1000),
-          sellPreview: inEther
+          sellPreview: inEther,
         }
         return object
       }, state.seriesRates)
     )
 
-    const filteredRates = ratesData.filter(p => {
+    const filteredRates = ratesData.filter((p) => {
       return p.status === 'fulfilled'
     })
 
@@ -242,7 +267,7 @@ const IndexPage = props => {
   const updateSeries = async () => {
     const rates = await _getRates(series)
     if (rates && rates.length > 0) {
-      rates.map(object => {
+      rates.map((object) => {
         const getAPR = yieldAPR(
           object.value.sellPreview, // _rate
           object.value.maturity // _maturity
@@ -255,13 +280,13 @@ const IndexPage = props => {
         console.log(
           `APR: ${getAPR} for ${object.value.address}, sellPreview: ${object.value.sellPreview}, maturing on ${setDate}`
         )
-        const foundIndex = series.findIndex(s => {
+        const foundIndex = series.findIndex((s) => {
           return s.address === object.value.address
         })
         if (foundIndex > -1) {
           const setAPR = roundToTwo(getAPR)
           series[foundIndex].apr = setAPR
-          series[foundIndex].label = `${series[foundIndex].label} ${setAPR}`
+          series[foundIndex].label = `${series[foundIndex].label} (${setAPR}%)`
         }
       })
     }
@@ -315,6 +340,7 @@ const IndexPage = props => {
 
   const site = (data || {}).site
   const page = (data || {}).page
+  const people = (data || {}).people
 
   if (!site) {
     throw new Error(
@@ -330,12 +356,12 @@ const IndexPage = props => {
 
   const SignupForm = ({ status, message, onValidated }) => {
     let email
-    const submit = e => {
+    const submit = (e) => {
       e.preventDefault()
       email &&
         email.value.indexOf('@') > -1 &&
         onValidated({
-          EMAIL: email.value
+          EMAIL: email.value,
         })
     }
 
@@ -344,7 +370,7 @@ const IndexPage = props => {
         <input
           placeholder="Your email"
           className="inline-block relative w-full p-4 bg-white text-gray-600 mb-4 rounded border border-2 border-gray-300"
-          ref={node => (email = node)}
+          ref={(node) => (email = node)}
           type="email"
         />
         <button
@@ -377,17 +403,17 @@ const IndexPage = props => {
     )
   }
 
-  const switchSeries = series => {
+  const switchSeries = (series) => {
     console.log('Switched series:', series)
     setSelectedSeries(series)
     logEvent({
       category: 'Landing Page',
       action: 'Switched Series',
-      label: `Switched to ${series.date} • ${series.apr}`
+      label: `Switched to ${series.date} • ${series.apr}`,
     })
   }
 
-  const switchTabs = index => {
+  const switchTabs = (index) => {
     let tab
     switch (index) {
       case 1:
@@ -402,12 +428,12 @@ const IndexPage = props => {
     logEvent({
       category: 'Landing Page',
       action: 'Switched Tab',
-      label: `Switched to ${tab.cta}`
+      label: `Switched to ${tab.cta}`,
     })
     return tab
   }
 
-  const formSubmit = e => {
+  const formSubmit = (e) => {
     e.preventDefault()
     console.log('form submitted, amount, series, tab', amount, selectedSeries, tab)
     if (typeof window) {
@@ -417,24 +443,48 @@ const IndexPage = props => {
       logEvent({
         category: 'Landing Page',
         action: 'Borrow',
-        label: amount ? amount : 'Borrow'
+        label: amount ? amount : 'Borrow',
       })
     } else if (tab.type === 'lend') {
       logEvent({
         category: 'Landing Page',
         action: 'Lend',
-        label: amount ? amount : 'Lend'
+        label: amount ? amount : 'Lend',
       })
     }
     logEvent({
       category: 'Landing Page',
       action: 'Used App',
-      label: `Type: ${tab.cta}, Series: ${selectedSeries.label} • APR: ${selectedSeries.apr}, Amount: ${amount}`
+      label: `Type: ${tab.cta}, Series: ${selectedSeries.label} (${selectedSeries.apr}), Amount: ${amount}`,
     })
   }
 
+  const ForComponent = ({ header, array, className }) => {
+    return (
+      <div className={`p-8 md:p-16 w-full ${className}`}>
+        <h3 className="inline-block w-full font-medium text-2xl md:text-3xl mb-4">{header}</h3>
+        {array &&
+          array.map((object, index) => (
+            <div
+              className={`inline-block w-full font-normal ${
+                index === page.borrowersText.length - 1 ? 'mb-0' : 'mb-4'
+              }`}
+              key={index}
+            >
+              <strong className="inline-block w-full font-bold font-medium text-lg mb-2">
+                {object.title}
+              </strong>
+              <p className="inline-block w-full opacity-50 text-sm">{object.description}</p>
+            </div>
+          ))}
+      </div>
+    )
+  }
+
+  const centered = 'block mx-auto w-full max-w-4xl px-5'
+
   return (
-    <Layout dark>
+    <Layout>
       <SEO
         title={page.title}
         description={site.description}
@@ -465,7 +515,7 @@ const IndexPage = props => {
           <MailchimpSubscribe
             render={({ subscribe, status, message }) => (
               <SignupForm
-                onValidated={formData => subscribe(formData)}
+                onValidated={(formData) => subscribe(formData)}
                 status={status}
                 message={message}
               />
@@ -477,70 +527,147 @@ const IndexPage = props => {
         </div>
       </Modal>
 
-      <ContainerFull padding="p-0">
-        <div className="h-full app">
-          {/* Form */}
-          <div className="pt-32 pb-4 md:py-32 px-5 md:px-12 series text-center">
-            <div className="block mx-auto max-w-xs mb-4 md:mb-8">
-              <p className="text-orange-300 font-bold tracking-widest text-xl md:text-3xl uppercase m-0">
-                {selectedSeries.date}
-              </p>
-              <h1 className="text-5xl md:text-6xl font-semibold p-0 m-0">{selectedSeries.apr}%</h1>
-              <strong className="block text-xs uppercase text-indigo-600 tracking-widest mb-2">
-                Change series
-              </strong>
-              <Select
-                className="select"
-                isSearchable={false}
-                isDisabled={isDisabled}
-                isLoading={isLoading}
-                onChange={selectedSeries => switchSeries(selectedSeries)}
-                isMulti={false}
-                options={series}
-                value={selectedSeries}
-                ref={selectRef}
-              />
-              <Tabs className="my-8" onSelect={index => switchTabs(index)}>
-                <TabList className="flex align-middle justify-center rounded-full w-auto">
+      {/* Hero */}
+      <section className="hero flex items-center justify-center h-screen text-left md:text-center bg-offwhite">
+        <div className={centered}>
+          <h1 className="font-medium text-5xl mb-4">{page.heading}</h1>
+          <p className="text-gray-600 mb-8">{page.body}</p>
+          {page.ctaPrimary ? (
+            <Button external primary text={page.ctaPrimary} type="button" to={page.ctaPrimaryURL} />
+          ) : null}
+        </div>
+      </section>
+      {/* App */}
+      <section className="flex items-center justify-center h-auto py-12 text-left bg-white">
+        <div className={centered}>
+          <div className="w-full p-4 md:p-8 border-2 border-gray-100 text-gray-600">
+            <div className="flex justify-stretch md:justify-between flex-col md:flex-row w-full items-top mb-4">
+              <div className="flex-grow mb-4 md:mr-8">
+                <p className="mb-2">Selected series</p>
+                <div className="font-medium text-black text-2xl md:text-4xl">
+                  <Select
+                    className="select"
+                    isSearchable={false}
+                    isDisabled={isDisabled}
+                    isLoading={isLoading}
+                    onChange={(selectedSeries) => switchSeries(selectedSeries)}
+                    isMulti={false}
+                    options={series}
+                    value={selectedSeries}
+                    ref={selectRef}
+                  />
+                </div>
+              </div>
+              <Tabs className="text-gray-400" onSelect={(index) => switchTabs(index)}>
+                <TabList className="flex align-middle justify-center w-auto">
                   <Tab>{borrow.cta}</Tab>
                   <Tab>{lend.cta}</Tab>
                 </TabList>
                 <TabPanel className="hidden">&nbsp;</TabPanel>
                 <TabPanel className="hidden">&nbsp;</TabPanel>
               </Tabs>
-              <form onSubmit={e => formSubmit(e)}>
-                <label htmlFor="amount">Amount of DAI to {tab.cta}</label>
-                <input
-                  className="inline-block relative w-full px-2 py-1 bg-transparent border-2 rounded-md border-indigo-500"
-                  type="number"
-                  onChange={event => setAmount(event.target.value)}
-                  value={amount}
-                  id="amount"
-                />
-                <button
-                  className="inline-block relative w-full rounded-md bg-white text-indigo-700 font-bold py-3 px-8 my-4 link"
-                  disabled={isDisabled}
-                  type="submit"
-                >
-                  {tab.cta} {amount} DAI
-                </button>
-              </form>
             </div>
-          </div>
-          {/* Right  */}
-          <div className="py-12 md:py-48 px-5 md:px-12 bg-indigo-800 interest md:h-full">
-            <h2 className="text-2xl font-semibold mb-4">{tab.heading}</h2>
-            <p className="text-sm text-gray-500 tracking-wide mb-8">
-              Interest rates shown are market rates and are subject to change. Your rate may vary
-              based on the amount borrowed. Rates shown are for information purposes only.
-            </p>
-            <hr className="w-12 border-4 border-white rounded-full mx-0 my-4" />
-            <button className={classLinks} onClick={() => openModal()}>
-              Sign up for our mailing list
-            </button>
+            <form className="font-sans text-base font-normal" onSubmit={(e) => formSubmit(e)}>
+              <label htmlFor="amount" className="text-sm text-gray-500">
+                Amount of DAI to {tab.cta}
+              </label>
+              <input
+                className="border-2 border-gray-100 px-4 py-2 inline-block w-full my-5"
+                type="number"
+                onChange={(event) => setAmount(event.target.value)}
+                value={amount}
+                id="amount"
+              />
+              <button
+                className="inline-block relative w-full bg-black text-white font-bold py-3 px-8 link font-medium"
+                disabled={isDisabled}
+                type="submit"
+              >
+                {tab.cta} {amount} DAI
+              </button>
+            </form>
           </div>
         </div>
-      </ContainerFull>
+      </section>
+      {/* Value props */}
+      <section className="flex py-0 md:py-12">
+        <div className="flex flex-col md:flex-row justify-between w-full max-w-6xl mx-auto">
+          <ForComponent
+            header="For lenders"
+            array={page.lendersText}
+            className="bg-black text-white"
+          />
+          <ForComponent
+            header="For lenders"
+            array={page.lendersText}
+            className="bg-offwhite text-black"
+          />
+        </div>
+      </section>
+      {/* Backers */}
+      <section className="flex py-12 text-center">
+        <div className={centered}>
+          <h3 className="font-medium text-2xl mb-8">{page.backersHeading}</h3>
+          <div className="w-full relative inline-block">
+            <div className="flex flex-col md:flex-row justify-center items-center">
+              {page.backers &&
+                page.backers.map((backer, index) => (
+                  <img
+                    className={`h-8 ${
+                      index === page.backers.length - 1 ? 'mb-0 md:mr-0' : 'mb-4 md:mr-6'
+                    }`}
+                    key={`backer-${index}`}
+                    src={imageUrlFor(buildImageObj(backer))}
+                  />
+                ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Team */}
+      <section className="flex py-12 text-center team bg-offwhite">
+        <div className={centered}>
+          <h4 className="font-medium text-2xl mb-8">Our team</h4>
+          <div className="grid md:grid-flow-col gap-4">
+            {people && people.edges
+              ? people.edges.map((person, index) => (
+                  <div
+                    className={`inline-block w-full text-left ${
+                      index === people.edges.length - 1 ? 'mb-0' : 'mb-4 md:mb-0'
+                    }`}
+                  >
+                    <img
+                      className="w-full h-64 object-cover mb-3"
+                      key={`person-${index}`}
+                      src={imageUrlFor(buildImageObj(person.node.image))}
+                    />
+                    <strong className="inline-block w-full font-medium text-2xl">
+                      {person.node.name}
+                    </strong>
+                    <p className="inlie-block w-full text-sm mb-4">{person.node.title}</p>
+                    <div className="socials flex flex-row items-center justify-start text-sm text-gray-600 w-full">
+                      {person.node.twitter ? (
+                        <a
+                          className="flex items-center justify-start mr-4"
+                          href={person.node.twitter}
+                        >
+                          <img class="h-4 mr-2" src="/social/twitter.svg" />
+                          Twitter
+                        </a>
+                      ) : null}
+                      {person.node.linkedin ? (
+                        <a className="flex items-center justify-start" href={person.node.linkedin}>
+                          <img class="h-4 mr-2" src="/social/linkedin.svg" />
+                          LinkedIn
+                        </a>
+                      ) : null}
+                    </div>
+                  </div>
+                ))
+              : null}
+          </div>
+        </div>
+      </section>
     </Layout>
   )
 }

@@ -1,14 +1,12 @@
 import React from 'react'
 import { Link } from 'gatsby'
 
-import Logo from './logo'
-
 import { logEvent } from '../utils/analytics'
 import { buildImageObj } from '../lib/helpers'
 import { imageUrlFor } from '../lib/image-url'
 
 const classLinks =
-  'flex justify-start items-center w-auto font-normal inherit mb-2 md:mb-0 mr-0 md:mr-8 link py-1'
+  'flex justify-start items-center w-full md:w-auto font-normal inherit mb-2 md:mb-0 mr-0 md:mr-8 link py-1'
 
 const Footer = class extends React.Component {
   constructor(props) {
@@ -82,11 +80,14 @@ const Footer = class extends React.Component {
       )
 
     return (
-      <footer className="inline-block w-full py-6 px-5 md:px-12 relative xl:fixed bottom-0 right-0 left-0 text-xs z-20 footer text-gray-600">
-        <div className="flex flex-col md:flex-row">
-          {footerLinks.map((object, index) => (
-            <LinkComponent title={object.title} list={object.list} key={index} />
-          ))}
+      <footer className="footer inline-block w-full py-6 px-5 md:px-12 relative text-xs text-gray-600">
+        <div className="flex flex-col md:flex-row justify-start md:justify-between items-center w-full">
+          <div className="flex flex-col md:flex-row items-center w-full md:w-auto">
+            {footerLinks.map((object, index) => (
+              <LinkComponent title={object.title} list={object.list} key={index} />
+            ))}
+          </div>
+          <p className="w-full md:w-auto text-gray-400">&copy; {new Date().getFullYear()}</p>
         </div>
       </footer>
     )

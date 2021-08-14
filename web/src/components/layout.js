@@ -7,11 +7,11 @@ import '../styles/all.scss'
 
 class Layout extends React.Component {
   render() {
-    const { bgImage, children, companyInfo, siteTitle, dark } = this.props
+    const { bgImage, children, companyInfo, siteTitle } = this.props
 
     return (
       <>
-        <Header siteTitle={siteTitle} dark={dark} />
+        <Header siteTitle={siteTitle} />
         <div id="modal"></div>
         <div>{children}</div>
         <Footer
@@ -20,7 +20,6 @@ class Layout extends React.Component {
           socials={companyInfo.socials || []}
           email={companyInfo.email || `info@yield.is`}
           city={companyInfo.city || `Chicago`}
-          dark={dark}
         />
         {bgImage ? (
           <div
