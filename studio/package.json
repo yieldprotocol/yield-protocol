@@ -3,9 +3,6 @@
   "name": "yield-protocol-studio",
   "version": "0.0.1",
   "author": "Rishabh Varshney <it.is.rishabh@gmail.com>",
-  "engines": {
-    "node": "12.x"
-  },
   "scripts": {
     "deploy": "npm run graphql-deploy && npm run sanity-deploy",
     "format": "prettier-eslint --write \"**/*.js\" \"!node_modules/**\"",
