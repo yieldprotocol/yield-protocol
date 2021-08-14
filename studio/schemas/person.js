@@ -47,6 +47,16 @@ export default {
           lists: []
         }
       ]
+    },
+    {
+      name: "twitter",
+      title: "Twitter",
+      type: "url"
+    },
+    {
+      name: "linkedin",
+      title: "LinkedIn",
+      type: "url"
     }
   ],
   preview: {

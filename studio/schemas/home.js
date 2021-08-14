@@ -3,8 +3,6 @@ export default {
   title: "Home page",
   type: "document",
   liveEdit: false,
-  // You probably want to uncomment the next line once you've made the pages documents in the Studio. This will remove the pages document type from the create-menus.
-  __experimental_actions: ["update", "publish" /* "create", "delete" */],
   fields: [
     {
       name: "title",
@@ -19,12 +17,7 @@ export default {
     {
       name: "body",
       title: "Body",
-      type: "blockContent"
-    },
-    {
-      name: "audit",
-      title: "Audit text",
-      type: "blockContent"
+      type: "text"
     },
     {
       name: "mainImage",
@@ -52,25 +45,27 @@ export default {
       type: "url"
     },
     {
-      name: "stats",
-      title: "Stats",
+      name: "borrowersText",
+      title: "For borrowers",
       type: "array",
       of: [{ type: "stat" }]
     },
     {
-      name: "showBlog",
-      title: "Show blog (enabled by default)",
-      type: "boolean"
+      name: "lendersText",
+      title: "For lenders",
+      type: "array",
+      of: [{ type: "stat" }]
     },
     {
-      name: "mainCTA",
-      title: "CTA at bottom of page",
+      name: "backersHeading",
+      title: "Backers heading",
       type: "string"
     },
     {
-      name: "mainCTAURL",
-      title: "CTA destination (goes to /contact by default)",
-      type: "string"
-    }
+      name: "backers",
+      title: "Backers",
+      type: "array",
+      of: [{ type: "image" }]
+    },
   ]
 };

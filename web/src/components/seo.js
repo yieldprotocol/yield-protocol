@@ -28,8 +28,8 @@ function SEO({ description, image, lang, meta, keywords = [], title, url }) {
           return
         }
         const metaDescription = description || data.site.description
-        const socialImage = image || 'https://yield-web.netlify.app/img/social.png'
-        const siteUrl = url || 'https://yield-web.netlify.app/'
+        const socialImage = image || 'https://yield-protocol.netlify.app/img/social.png'
+        const siteUrl = url || 'https://yield-protocol.netlify.app/'
 
         return (
           <Helmet
@@ -40,33 +40,33 @@ function SEO({ description, image, lang, meta, keywords = [], title, url }) {
             titleTemplate={title === data.site.title ? '%s' : `%s | ${data.site.title}`}
             link={[
               {
-                href: 'https://yield-web.netlify.app/favicons/apple-touch-icon.png',
+                href: 'https://yield-protocol.netlify.app/favicons/apple-touch-icon.png',
                 sizes: '180x180',
                 rel: 'apple-touch-icon'
               },
               {
-                href: 'https://yield-web.netlify.app/favicons/favicon-32x32.png',
+                href: 'https://yield-protocol.netlify.app/favicons/favicon-32x32.png',
                 sizes: '32x32',
                 type: 'image/png',
                 rel: 'icon'
               },
               {
-                href: 'https://yield-web.netlify.app/favicons/favicon-16x16.png',
+                href: 'https://yield-protocol.netlify.app/favicons/favicon-16x16.png',
                 sizes: '16x16',
                 type: 'image/png',
                 rel: 'icon'
               },
               {
-                href: 'https://yield-web.netlify.app/favicons/site.webmanifest',
+                href: 'https://yield-protocol.netlify.app/favicons/site.webmanifest',
                 rel: 'manifest'
               },
               {
-                href: 'https://yield-web.netlify.app/favicons/safari-pinned-tab.svg',
+                href: 'https://yield-protocol.netlify.app/favicons/safari-pinned-tab.svg',
                 color: '#5641ff',
                 rel: 'mask-icon'
               },
               {
-                href: 'https://yield-web.netlify.app/favicons/favicon.ico',
+                href: 'https://yield-protocol.netlify.app/favicons/favicon.ico',
                 rel: 'shortcut icon'
               },
               {
@@ -141,11 +141,11 @@ function SEO({ description, image, lang, meta, keywords = [], title, url }) {
                 name: 'msapplication-TileColor'
               },
               {
-                content: 'https://yield-web.netlify.app/favicons/browserconfig.xml',
+                content: 'https://yield-protocol.netlify.app/favicons/browserconfig.xml',
                 name: 'msapplication-config'
               },
               {
-                content: '#5641ff',
+                content: '#333333',
                 name: 'theme-color'
               }
             ]

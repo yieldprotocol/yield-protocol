@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 import { ArrowUpRight } from 'react-feather'
 
-const ButtonClass = 'inline-flex items-center text-center rounded-lg'
+const ButtonClass = 'inline-flex items-center text-center'
 
 class Button extends React.Component {
   render() {
@@ -28,7 +28,7 @@ class Button extends React.Component {
         : 'link bg-transparent'
     } ${
       primary
-        ? 'border-2 border-solid border-indigo-700 bg-indigo-700 text-white font-bold px-4 py-2'
+        ? 'border-2 border-solid border-black bg-black text-white font-bold px-4 py-2'
         : 'bg-transparent'
     } ${margin ? margin : ''} ${full ? 'md:w-full' : 'md:w-auto'}`
 

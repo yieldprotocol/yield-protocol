@@ -1,44 +1,52 @@
-require("dotenv").config({
+require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`,
-});
+})
 
 const {
-  api: { projectId, dataset, token },
-} = requireConfig("../studio/sanity.json");
+  api: { projectId, token },
+} = requireConfig('../studio/sanity.json')
 
 module.exports = {
   plugins: [
-    "gatsby-plugin-react-helmet",
-    "gatsby-plugin-postcss",
+    'gatsby-plugin-react-helmet',
     {
-      resolve: `gatsby-plugin-sass`,
+      resolve: `gatsby-plugin-postcss`,
       options: {
-        postCssPlugins: [require("tailwindcss")],
+        cssLoaderOptions: {
+          exportLocalsConvention: false,
+          namedExport: false,
+        },
       },
     },
     {
-      resolve: "gatsby-plugin-gtag",
+      resolve: `gatsby-plugin-sass`,
+      options: {
+        postCssPlugins: [require('tailwindcss')],
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-gtag',
       trackingId: process.env.GATSBY_GA_ID,
       // Setting this parameter is optional
       anonymize: true,
     },
     {
       // keep as first gatsby-source-filesystem plugin for gatsby image support
-      resolve: "gatsby-source-filesystem",
+      resolve: 'gatsby-source-filesystem',
       options: {
         path: `${__dirname}/static/`,
-        name: "uploads",
+        name: 'uploads',
       },
     },
     {
-      resolve: "gatsby-plugin-netlify",
+      resolve: 'gatsby-plugin-netlify',
       options: {
         headers: {
-          "/*": [
-            "X-XSS-Protection: 1; mode=block",
-            "X-Content-Type-Options: nosniff",
-            "Referrer-Policy: same-origin",
-            `Content-Security-Policy: frame-ancestors 'self' https://yield.sanity.studio`,
+          '/*': [
+            'X-XSS-Protection: 1; mode=block',
+            'X-Content-Type-Options: nosniff',
+            'Referrer-Policy: same-origin',
+            `Content-Security-Policy: frame-ancestors 'self' https://yield-protocol.sanity.studio`,
           ],
         },
         mergeSecurityHeaders: true, // boolean to turn off the default security headers
@@ -49,11 +57,11 @@ module.exports = {
       },
     },
     {
-      resolve: "gatsby-source-sanity",
+      resolve: 'gatsby-source-sanity',
       options: {
         // To enable preview of drafts, copy .env-example into .env,
         // and add a token with read permissions
-        overlayDrafts: false,
+        overlayDrafts: true,
         watchMode: true,
         dataset: process.env.SANITY_DATASET,
         projectId,
@@ -61,7 +69,7 @@ module.exports = {
       },
     },
   ],
-};
+}
 
 /**
  * We're requiring a file in the studio folder to make the monorepo
@@ -72,16 +80,16 @@ module.exports = {
 
 function requireConfig(path) {
   try {
-    return require(path);
+    return require(path)
   } catch (e) {
     console.error(
-      "Failed to require sanity.json. Fill in projectId and dataset name manually in gatsby-config.js"
-    );
+      'Failed to require sanity.json. Fill in projectId and dataset name manually in gatsby-config.js'
+    )
     return {
       api: {
-        projectId: process.env.SANITY_PROJECT_ID || "",
-        dataset: process.env.SANITY_DATASET || "",
+        projectId: process.env.SANITY_PROJECT_ID || '',
+        dataset: process.env.SANITY_DATASET || '',
       },
-    };
+    }
   }
 }

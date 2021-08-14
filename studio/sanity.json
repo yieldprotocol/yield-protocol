@@ -8,25 +8,6 @@
     "name": "Yield Protocol CMS",
     "basePath": "/"
   },
-  "__experimental_spaces": [
-    {
-      "name": "production",
-      "title": "Prod",
-      "default": true,
-      "api": {
-        "projectId": "st5vnid5",
-        "dataset": "production"
-      }
-    },
-    {
-      "name": "staging",
-      "title": "Staging",
-      "api": {
-        "projectId": "st5vnid5",
-        "dataset": "staging"
-      }
-    }
-  ],
   "plugins": [
     "@sanity/base",
     "@sanity/components",

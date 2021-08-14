@@ -1,17 +1,11 @@
 module.exports = {
+  purge: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     minHeight: {
-      display: '50rem'
+      display: '50rem',
     },
     fontFamily: {
-      sans: [
-        'DM Sans',
-        'ui-sans-serif',
-        'system-ui',
-        '-apple-system',
-        'BlinkMacSystemFont',
-        'sans-serif'
-      ]
+      sans: ['ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
     },
     extend: {
       colors: {
@@ -19,10 +13,10 @@ module.exports = {
         primary: '#5641ff',
         secondary: '#A3FFE3',
         offwhite: '#F7F7FA',
-        yellow: 'F7D958'
-      }
-    }
+        yellow: 'F7D958',
+      },
+    },
   },
   variants: {},
-  plugins: []
+  plugins: [],
 }

@@ -42,7 +42,7 @@ Read the [step-by-step blog post](https://www.sanity.io/blog/how-to-quickly-set-
 
 ```sh
 git clone git@github.com:yieldprotocol/yield-protocol.git
-cd yield-web
+cd yield-protocol
 npm install
 
 # Install or upgrade the Sanity CLI to
@@ -117,7 +117,7 @@ npm run now-deploy
 
 ## Contributing
 
-1. git@github.com:yieldprotocol/yield-web.git
+1. git@github.com:yieldprotocol/yield-protocol.git
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)

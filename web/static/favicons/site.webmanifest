@@ -1,6 +1,6 @@
 {
-    "name": "Yield",
-    "short_name": "Yield",
+    "name": "Yield Protocol",
+    "short_name": "Yield Protocol",
     "icons": [
         {
             "src": "/favicons/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#5641ff",
-    "background_color": "#5641ff",
+    "theme_color": "#333333",
+    "background_color": "#333333",
     "display": "standalone"
 }

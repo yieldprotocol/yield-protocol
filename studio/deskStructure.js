@@ -70,60 +70,6 @@ export default () =>
                     .schemaType("home")
                     .documentId("home")
                 )
-                .icon(FaFile),
-              S.listItem()
-                .title("About")
-                .child(
-                  S.editor()
-                    .id("aboutPage")
-                    .schemaType("about")
-                    .documentId("about")
-                )
-                .icon(FaFile),
-              S.listItem()
-                .title("Mission")
-                .child(
-                  S.editor()
-                    .id("missionPage")
-                    .schemaType("mission")
-                    .documentId("mission")
-                )
-                .icon(FaFile),
-              S.listItem()
-                .title("Contact")
-                .child(
-                  S.editor()
-                    .id("contactPage")
-                    .schemaType("page")
-                    .documentId("contact")
-                )
-                .icon(FaFile),
-              S.listItem()
-                .title("Careers")
-                .child(
-                  S.editor()
-                    .id("careersPage")
-                    .schemaType("page")
-                    .documentId("careers")
-                )
-                .icon(FaFile),
-              S.listItem()
-                .title("Blog")
-                .child(
-                  S.editor()
-                    .id("blogsPage")
-                    .schemaType("page")
-                    .documentId("blog")
-                )
-                .icon(FaFile),
-              S.listItem()
-                .title("Categories")
-                .child(
-                  S.editor()
-                    .id("categoriesPage")
-                    .schemaType("page")
-                    .documentId("categories")
-                )
                 .icon(FaFile)
             ])
         ),

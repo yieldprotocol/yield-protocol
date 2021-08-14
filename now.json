@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "yield-web",
+  "name": "yield-protocol",
   "builds": [
     {
       "src": "web/package.json",
