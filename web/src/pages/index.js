@@ -601,7 +601,7 @@ const IndexPage = props => {
         <div className={centered}>
           <h3 className="font-medium text-2xl mb-8">{page.backersHeading}</h3>
           <div className="w-full relative inline-block">
-            <div className="flex flex-col md:flex-row justify-center items-center">
+            <div className="flex flex-col md:flex-row justify-start items-center">
               {page.backers &&
                 page.backers.map((backer, index) => (
                   <img
@@ -613,6 +613,11 @@ const IndexPage = props => {
                   />
                 ))}
             </div>
+          </div>
+          <div className="flex flex-col md:flex-row w-full">
+            <p>
+              Mariano Conti from Maker, Seb &amp; Suhail from Zapper
+            </p>
           </div>
         </div>
       </section>
