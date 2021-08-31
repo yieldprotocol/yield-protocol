@@ -31,7 +31,7 @@ const fyDai = [
   'function mature()',
   'function name() view returns (string)',
   'function balanceOf(address) view returns (uint256)',
-  'function redeem(address, address, uint256)',
+  'function redeem(address, address, uint256)'
 ]
 
 const classLinks =
@@ -40,13 +40,13 @@ const classLinks =
 const borrow = {
   heading: 'Borrow today & pay fixed interest.',
   type: 'borrow',
-  cta: 'Borrow',
+  cta: 'Borrow'
 }
 
 const lend = {
   heading: 'Lend today & earn fixed interest.',
   type: 'lend',
-  cta: 'Lend',
+  cta: 'Lend'
 }
 
 const series = [
@@ -55,15 +55,15 @@ const series = [
     value: '1633046399',
     label: 'September 2021',
     date: 'September 2021',
-    apr: 2.84,
+    apr: 2.84
   },
   {
     address: '0x5591f644B377eD784e558D4BE1bbA78f5a26bdCd',
     value: '1640995199',
     label: 'December 2021',
     date: 'December 2021',
-    apr: 3.84,
-  },
+    apr: 3.84
+  }
 ]
 
 export const query = graphql`
@@ -111,7 +111,11 @@ export const query = graphql`
       ctaSecondaryURL
       borrowersText {
         title
-        description
+        image {
+          asset {
+            _id
+          }
+        }
       }
       lendersText {
         title
@@ -151,7 +155,7 @@ export const query = graphql`
   }
 `
 
-const IndexPage = (props) => {
+const IndexPage = props => {
   const { data, errors } = props
 
   const [modalIsOpen, setIsOpen] = useState(false)
@@ -160,6 +164,7 @@ const IndexPage = (props) => {
   const [isLoading, setIsLoading] = useState(true)
   const [amount, setAmount] = useState(100)
   const [tab, setTab] = useState(borrow)
+  const [seriesArray, setSeriesArray] = useState([])
 
   const selectRef = useRef()
 
@@ -169,7 +174,7 @@ const IndexPage = (props) => {
       case 'updateRates':
         return {
           ...state,
-          seriesRates: action.payload,
+          seriesRates: action.payload
         }
       default:
         return state
@@ -181,7 +186,7 @@ const IndexPage = (props) => {
 
   // Set state for yield
   const initState = {
-    seriesRates: new Map(),
+    seriesRates: new Map()
   }
 
   const [state, dispatch] = React.useReducer(reducer, initState)
@@ -197,7 +202,7 @@ const IndexPage = (props) => {
       provider = ethers.getDefaultProvider('homestead', {
         etherscan: process.env.GATSBY_ETHERSCAN_API_KEY,
         infura: process.env.GATSBY_INFURA_PROJECT_ID,
-        alchemy: process.env.GATSBY_ALCHEMY_API_KEY,
+        alchemy: process.env.GATSBY_ALCHEMY_API_KEY
       })
     }
   }
@@ -208,9 +213,9 @@ const IndexPage = (props) => {
   }
 
   // Get the yield market rates for a particular set of series
-  const _getRates = async (series) => {
+  const _getRates = async series => {
     const ratesData = await Promise.allSettled(
-      series.map(async (x) => {
+      series.map(async x => {
         const contract = new ethers.Contract(x.address, Pool.abi, provider)
 
         const fyDaiAddress = await contract.fyDai()
@@ -230,13 +235,13 @@ const IndexPage = (props) => {
           address: x.address,
           maturity: parsedfyDaiMaturity,
           isMature: parsedfyDaiMaturity < Math.round(new Date().getTime() / 1000),
-          sellPreview: inEther,
+          sellPreview: inEther
         }
         return object
       }, state.seriesRates)
     )
 
-    const filteredRates = ratesData.filter((p) => {
+    const filteredRates = ratesData.filter(p => {
       return p.status === 'fulfilled'
     })
 
@@ -267,7 +272,7 @@ const IndexPage = (props) => {
   const updateSeries = async () => {
     const rates = await _getRates(series)
     if (rates && rates.length > 0) {
-      rates.map((object) => {
+      rates.map(object => {
         const getAPR = yieldAPR(
           object.value.sellPreview, // _rate
           object.value.maturity // _maturity
@@ -280,7 +285,7 @@ const IndexPage = (props) => {
         console.log(
           `APR: ${getAPR} for ${object.value.address}, sellPreview: ${object.value.sellPreview}, maturing on ${setDate}`
         )
-        const foundIndex = series.findIndex((s) => {
+        const foundIndex = series.findIndex(s => {
           return s.address === object.value.address
         })
         if (foundIndex > -1) {
@@ -290,7 +295,7 @@ const IndexPage = (props) => {
         }
       })
     }
-    // setTimeout(() => selectRef.current.select.focus(), 1)
+    setSeriesArray(series)
   }
 
   // Run on page load
@@ -311,7 +316,6 @@ const IndexPage = (props) => {
             25
           )
         }
-        setIsDisabled(false)
         setIsLoading(false)
       }
     })
@@ -356,12 +360,12 @@ const IndexPage = (props) => {
 
   const SignupForm = ({ status, message, onValidated }) => {
     let email
-    const submit = (e) => {
+    const submit = e => {
       e.preventDefault()
       email &&
         email.value.indexOf('@') > -1 &&
         onValidated({
-          EMAIL: email.value,
+          EMAIL: email.value
         })
     }
 
@@ -370,7 +374,7 @@ const IndexPage = (props) => {
         <input
           placeholder="Your email"
           className="inline-block relative w-full p-4 bg-white text-gray-600 mb-4 rounded border border-2 border-gray-300"
-          ref={(node) => (email = node)}
+          ref={node => (email = node)}
           type="email"
         />
         <button
@@ -403,17 +407,17 @@ const IndexPage = (props) => {
     )
   }
 
-  const switchSeries = (series) => {
+  const switchSeries = series => {
     console.log('Switched series:', series)
     setSelectedSeries(series)
     logEvent({
       category: 'Landing Page',
       action: 'Switched Series',
-      label: `Switched to ${series.date} • ${series.apr}`,
+      label: `Switched to ${series.date} • ${series.apr}`
     })
   }
 
-  const switchTabs = (index) => {
+  const switchTabs = index => {
     let tab
     switch (index) {
       case 1:
@@ -428,12 +432,12 @@ const IndexPage = (props) => {
     logEvent({
       category: 'Landing Page',
       action: 'Switched Tab',
-      label: `Switched to ${tab.cta}`,
+      label: `Switched to ${tab.cta}`
     })
     return tab
   }
 
-  const formSubmit = (e) => {
+  const formSubmit = e => {
     e.preventDefault()
     console.log('form submitted, amount, series, tab', amount, selectedSeries, tab)
     if (typeof window) {
@@ -443,19 +447,19 @@ const IndexPage = (props) => {
       logEvent({
         category: 'Landing Page',
         action: 'Borrow',
-        label: amount ? amount : 'Borrow',
+        label: amount ? amount : 'Borrow'
       })
     } else if (tab.type === 'lend') {
       logEvent({
         category: 'Landing Page',
         action: 'Lend',
-        label: amount ? amount : 'Lend',
+        label: amount ? amount : 'Lend'
       })
     }
     logEvent({
       category: 'Landing Page',
       action: 'Used App',
-      label: `Type: ${tab.cta}, Series: ${selectedSeries.label} (${selectedSeries.apr}), Amount: ${amount}`,
+      label: `Type: ${tab.cta}, Series: ${selectedSeries.label} (${selectedSeries.apr}), Amount: ${amount}`
     })
   }
 
@@ -466,15 +470,17 @@ const IndexPage = (props) => {
         {array &&
           array.map((object, index) => (
             <div
-              className={`inline-block w-full font-normal ${
+              className={`flex flex-col md:flex-row items-center w-full font-normal ${
                 index === page.borrowersText.length - 1 ? 'mb-0' : 'mb-4'
               }`}
               key={index}
             >
+              <div className="flex justify-start items-center w-10 h-10 rounded-full bg-white p-2 mb-4 md:mr-4">
+                <img className="w-full" src={imageUrlFor(buildImageObj(object.image))} />
+              </div>
               <strong className="inline-block w-full font-bold font-medium text-lg mb-2">
                 {object.title}
               </strong>
-              <p className="inline-block w-full opacity-50 text-sm">{object.description}</p>
             </div>
           ))}
       </div>
@@ -515,7 +521,7 @@ const IndexPage = (props) => {
           <MailchimpSubscribe
             render={({ subscribe, status, message }) => (
               <SignupForm
-                onValidated={(formData) => subscribe(formData)}
+                onValidated={formData => subscribe(formData)}
                 status={status}
                 message={message}
               />
@@ -541,51 +547,42 @@ const IndexPage = (props) => {
       <section className="flex items-center justify-center h-auto py-12 text-left bg-white">
         <div className={centered}>
           <div className="w-full p-4 md:p-8 border-2 border-gray-100 text-gray-600">
-            <div className="flex justify-stretch md:justify-between flex-col md:flex-row w-full items-top mb-4">
-              <div className="flex-grow mb-4 md:mr-8">
-                <p className="mb-2">Selected series</p>
-                <div className="font-medium text-black text-2xl md:text-4xl">
-                  <Select
-                    className="select"
-                    isSearchable={false}
-                    isDisabled={isDisabled}
-                    isLoading={isLoading}
-                    onChange={(selectedSeries) => switchSeries(selectedSeries)}
-                    isMulti={false}
-                    options={series}
-                    value={selectedSeries}
-                    ref={selectRef}
-                  />
-                </div>
+            {!isLoading && seriesArray && seriesArray[0] ? (
+              <div className="block">
+                {seriesArray.map((series, index) => (
+                  <div
+                    className="flex justify-between flex-col md:flex-row w-full items-center py-2 text-left mb-4 md:mb-0"
+                    key={`series-${index}`}
+                  >
+                    <div className="flex justify-start text-lg items-center w-full md:w-auto mb-4 md:mb-0">
+                      <img className="w-6 h-6 rounded-full mr-4" src="/img/dai.svg" />
+                      <strong className="mr-2 text-black">{series.apr}</strong>
+                      <p>{series.date}</p>
+                    </div>
+                    <div className="right">
+                      <a
+                        className="inline-block relative w-auto bg-white text-black border border-black font-bold py-3 px-8 link font-medium mr-3"
+                        disabled={isDisabled}
+                        href={`//app.yield.is/#/borrow/${series.value}`}
+                        target="_blank"
+                      >
+                        Borrow
+                      </a>
+                      <a
+                        className="inline-block relative w-auto bg-black text-white border border-black font-bold py-3 px-8 link font-medium"
+                        disabled={isDisabled}
+                        href={`//app.yield.is/#/lend/${series.value}`}
+                        target="_blank"
+                      >
+                        Lend
+                      </a>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <Tabs className="text-gray-400" onSelect={(index) => switchTabs(index)}>
-                <TabList className="flex align-middle justify-center w-auto">
-                  <Tab>{borrow.cta}</Tab>
-                  <Tab>{lend.cta}</Tab>
-                </TabList>
-                <TabPanel className="hidden">&nbsp;</TabPanel>
-                <TabPanel className="hidden">&nbsp;</TabPanel>
-              </Tabs>
-            </div>
-            <form className="font-sans text-base font-normal" onSubmit={(e) => formSubmit(e)}>
-              <label htmlFor="amount" className="text-sm text-gray-500">
-                Amount of DAI to {tab.cta}
-              </label>
-              <input
-                className="border-2 border-gray-100 px-4 py-2 inline-block w-full my-5"
-                type="number"
-                onChange={(event) => setAmount(event.target.value)}
-                value={amount}
-                id="amount"
-              />
-              <button
-                className="inline-block relative w-full bg-black text-white font-bold py-3 px-8 link font-medium"
-                disabled={isDisabled}
-                type="submit"
-              >
-                {tab.cta} {amount} DAI
-              </button>
-            </form>
+            ) : (
+              isLoading && <div className="loading">Loading</div>
+            )}
           </div>
         </div>
       </section>
@@ -593,14 +590,9 @@ const IndexPage = (props) => {
       <section className="flex py-0 md:py-12">
         <div className="flex flex-col md:flex-row justify-between w-full max-w-6xl mx-auto">
           <ForComponent
-            header="For lenders"
-            array={page.lendersText}
+            header="For borrows & lenders"
+            array={page.borrowersText}
             className="bg-black text-white"
-          />
-          <ForComponent
-            header="For lenders"
-            array={page.lendersText}
-            className="bg-offwhite text-black"
           />
         </div>
       </section>
