@@ -3,7 +3,6 @@ import { graphql } from 'gatsby'
 import MailchimpSubscribe from 'react-mailchimp-subscribe'
 import Modal from 'react-modal'
 import { X } from 'react-feather'
-import Dai from '/static/img/dai.svg'
 
 import { logEvent } from '../utils/analytics'
 
@@ -554,7 +553,7 @@ const IndexPage = props => {
                     key={`series-${index}`}
                   >
                     <div className="flex justify-start text-lg items-center w-full md:w-auto mb-4 md:mb-0">
-                      <img className="w-6 h-6 rounded-full mr-4" src={Dai} />
+                      <img className="w-6 h-6 rounded-full mr-4" src="img/dai.svg" />
                       <strong className="mr-2 text-black">{series.apr}</strong>
                       <p>{series.date}</p>
                     </div>
