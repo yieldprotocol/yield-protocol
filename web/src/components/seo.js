@@ -75,7 +75,12 @@ function SEO({ description, image, lang, meta, keywords = [], title, url }) {
               },
               {
                 href:
-                  'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap',
+                  'https://fonts.googleapis.com',
+                rel: 'preconnect'
+              },
+              {
+                href:
+                  'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600&display=swap',
                 rel: 'stylesheet'
               }
             ]}
