@@ -3,8 +3,7 @@ import { graphql } from 'gatsby'
 import MailchimpSubscribe from 'react-mailchimp-subscribe'
 import Modal from 'react-modal'
 import { X } from 'react-feather'
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
-import Select from 'react-select'
+import Dai from '/static/img/dai.svg'
 
 import { logEvent } from '../utils/analytics'
 
@@ -555,7 +554,7 @@ const IndexPage = props => {
                     key={`series-${index}`}
                   >
                     <div className="flex justify-start text-lg items-center w-full md:w-auto mb-4 md:mb-0">
-                      <img className="w-6 h-6 rounded-full mr-4" src="/img/dai.svg" />
+                      <img className="w-6 h-6 rounded-full mr-4" src={Dai} />
                       <strong className="mr-2 text-black">{series.apr}</strong>
                       <p>{series.date}</p>
                     </div>
@@ -581,7 +580,11 @@ const IndexPage = props => {
                 ))}
               </div>
             ) : (
-              isLoading && <div className="loading">Loading</div>
+              isLoading && (
+                <div className="flex text-center justify-center items-center p-12 border border-gray-200">
+                  Loading.…
+                </div>
+              )
             )}
           </div>
         </div>
@@ -615,9 +618,7 @@ const IndexPage = props => {
             </div>
           </div>
           <div className="flex flex-col md:flex-row w-full">
-            <p>
-              Mariano Conti from Maker, Seb &amp; Suhail from Zapper
-            </p>
+            <p>Mariano Conti from Maker, Seb &amp; Suhail from Zapper</p>
           </div>
         </div>
       </section>
