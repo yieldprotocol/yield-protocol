@@ -1,26 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { graphql } from 'gatsby'
-import MailchimpSubscribe from 'react-mailchimp-subscribe'
-import Modal from 'react-modal'
-import { X } from 'react-feather'
+import Particles from 'react-tsparticles'
 
-import { logEvent } from '../utils/analytics'
-
+// Libs
 import { buildImageObj } from '../lib/helpers'
 import { imageUrlFor } from '../lib/image-url'
 
+// Components
 import GraphQLErrorList from '../components/graphql-error-list'
 import Button from '../components/button'
 import SEO from '../components/seo'
 
+// Layout
 import Layout from '../containers/layout'
 
 // Pool
 import Pool from '../contracts/pool.json'
 
-if (typeof window !== 'undefined') {
-  Modal.setAppElement('body')
-}
+// Utils
+import { logEvent } from '../utils/analytics'
 
 // fyDai ABI
 const fyDai = [
@@ -150,19 +148,27 @@ export const query = graphql`
         }
       }
     }
+
+    companyInfo: sanityCompanyInfo(_id: { regex: "/(drafts.|)companyInfo/" }) {
+      socials {
+        title
+        image {
+          asset {
+            _id
+          }
+        }
+        url
+      }
+    }
   }
 `
 
 const IndexPage = props => {
   const { data, errors } = props
 
-  const [modalIsOpen, setIsOpen] = useState(false)
-  const [selectedSeries, setSelectedSeries] = useState(series[0])
+  const [seriesArray, setSeriesArray] = useState([])
   const [isDisabled, setIsDisabled] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
-  const [amount, setAmount] = useState(100)
-  const [tab, setTab] = useState(borrow)
-  const [seriesArray, setSeriesArray] = useState([])
 
   const selectRef = useRef()
 
@@ -324,14 +330,6 @@ const IndexPage = props => {
     }
   }, [])
 
-  function openModal() {
-    setIsOpen(true)
-  }
-
-  function closeModal() {
-    setIsOpen(false)
-  }
-
   if (errors) {
     return (
       <Layout>
@@ -343,6 +341,7 @@ const IndexPage = props => {
   const site = (data || {}).site
   const page = (data || {}).page
   const people = (data || {}).people
+  const socials = (data || {}).companyInfo.socials
 
   if (!site) {
     throw new Error(
@@ -356,131 +355,23 @@ const IndexPage = props => {
     )
   }
 
-  const SignupForm = ({ status, message, onValidated }) => {
-    let email
-    const submit = e => {
-      e.preventDefault()
-      email &&
-        email.value.indexOf('@') > -1 &&
-        onValidated({
-          EMAIL: email.value
-        })
-    }
-
-    return (
-      <form className="inline-block relative w-full" onSubmit={submit}>
-        <input
-          placeholder="Your email"
-          className="inline-block relative w-full p-4 bg-white text-gray-600 mb-4 rounded border border-2 border-gray-300"
-          ref={node => (email = node)}
-          type="email"
-        />
-        <button
-          className="inline-block relative w-full p-4 rounded font-bold bg-indigo-700 text-white"
-          onClick={submit}
-          type="submit"
-        >
-          Submit
-        </button>
-        {status ? (
-          <div className="inline-block relative w-full text-xs">
-            {status === 'sending' && (
-              <div className="inline-block relative w-full mt-4 text-gray-600">Subscribing...</div>
-            )}
-            {status === 'error' && (
-              <div
-                className="inline-block relative w-full mt-4 text-yellow-500"
-                dangerouslySetInnerHTML={{ __html: message }}
-              />
-            )}
-            {status === 'success' && (
-              <div
-                className="inline-block relative w-full mt-4 text-green-400"
-                dangerouslySetInnerHTML={{ __html: message }}
-              />
-            )}
-          </div>
-        ) : null}
-      </form>
-    )
-  }
-
-  const switchSeries = series => {
-    console.log('Switched series:', series)
-    setSelectedSeries(series)
-    logEvent({
-      category: 'Landing Page',
-      action: 'Switched Series',
-      label: `Switched to ${series.date} • ${series.apr}`
-    })
-  }
-
-  const switchTabs = index => {
-    let tab
-    switch (index) {
-      case 1:
-        tab = lend
-        break
-      default:
-        tab = borrow
-        break
-    }
-    console.log('Switched to:', tab)
-    setTab(tab)
-    logEvent({
-      category: 'Landing Page',
-      action: 'Switched Tab',
-      label: `Switched to ${tab.cta}`
-    })
-    return tab
-  }
-
-  const formSubmit = e => {
-    e.preventDefault()
-    console.log('form submitted, amount, series, tab', amount, selectedSeries, tab)
-    if (typeof window) {
-      window.open(`//app.yield.is/#/${tab.type}/${selectedSeries.value}/${amount}`)
-    }
-    if (tab.type === 'borrow') {
-      logEvent({
-        category: 'Landing Page',
-        action: 'Borrow',
-        label: amount ? amount : 'Borrow'
-      })
-    } else if (tab.type === 'lend') {
-      logEvent({
-        category: 'Landing Page',
-        action: 'Lend',
-        label: amount ? amount : 'Lend'
-      })
-    }
-    logEvent({
-      category: 'Landing Page',
-      action: 'Used App',
-      label: `Type: ${tab.cta}, Series: ${selectedSeries.label} (${selectedSeries.apr}), Amount: ${amount}`
-    })
-  }
-
   const ForComponent = ({ header, array, className }) => {
     return (
       <div className={`p-8 md:p-16 w-full ${className}`}>
         <h3 className="inline-block w-full font-medium text-2xl md:text-3xl mb-4">{header}</h3>
-        {array &&
-          array.map((object, index) => (
-            <div
-              className={`flex flex-col md:flex-row items-center w-full font-normal ${
-                index === page.borrowersText.length - 1 ? 'mb-0' : 'mb-4'
-              }`}
-              key={index}
-            >
-              <div className="flex justify-start items-center w-10 h-10 rounded-full bg-white p-2 mb-4 md:mr-4">
-                <img className="w-full" src={imageUrlFor(buildImageObj(object.image))} />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {array &&
+            array.map((object, index) => (
+              <div className="bg-gray-800 p-4 w-full font-normal" key={index}>
+                <div className="flex justify-start items-center w-10 h-10 rounded-full bg-offwhite p-2 mb-4 md:mr-4">
+                  <img className="w-full" src={imageUrlFor(buildImageObj(object.image))} />
+                </div>
+                <strong className="inline-block w-full font-bold font-medium text-lg mb-2">
+                  {object.title}
+                </strong>
               </div>
-              <strong className="inline-block w-full font-bold font-medium text-lg mb-2">
-                {object.title}
-              </strong>
-            </div>
-          ))}
+            ))}
+        </div>
       </div>
     )
   }
@@ -500,51 +391,107 @@ const IndexPage = props => {
         }
       />
 
-      <Modal
-        overlayClassName="modal-overlay"
-        contentLabel="Mailing list"
-        className="modal text-left text-black relative leading-relaxed"
-        isOpen={modalIsOpen}
-      >
-        <button
-          className="absolute right-0 top-0 align-middle p-2 bg-black rounded-full overflow-hidden m-4 close"
-          onClick={() => closeModal()}
-        >
-          <X className="h-full w-full relative" color="white" />
-        </button>
-        <div className="inline-block relative w-full">
-          <strong className="text-lg md:text-xl font-bold inline-block relative w-full mb-6">
-            Sign up for our mailing list to keep up to date
-          </strong>
-          <MailchimpSubscribe
-            render={({ subscribe, status, message }) => (
-              <SignupForm
-                onValidated={formData => subscribe(formData)}
-                status={status}
-                message={message}
-              />
-            )}
-            url={
-              'https://yield.us8.list-manage.com/subscribe/post?u=ba7359e990d89455a1c9be0e2&amp;id=025d8e6707'
-            }
-          />
-        </div>
-      </Modal>
-
       {/* Hero */}
       <section className="hero flex items-center justify-center h-screen text-left md:text-center bg-offwhite">
-        <div className={centered}>
+        <div
+          className={`relative ${centered}`}
+          style={{
+            zIndex: 1
+          }}
+        >
           <h1 className="font-medium text-5xl mb-4">{page.heading}</h1>
           <p className="text-gray-600 mb-8">{page.body}</p>
           {page.ctaPrimary ? (
             <Button external primary text={page.ctaPrimary} type="button" to={page.ctaPrimaryURL} />
           ) : null}
         </div>
+        <Particles
+          className="absolute w-full h-full bottom-0 right-0 left-0 top-0 z-0"
+          options={{
+            background: {
+              color: {
+                value: '#FFF'
+              }
+            },
+            fpsLimit: 60,
+            interactivity: {
+              detectsOn: 'canvas',
+              events: {
+                onClick: {
+                  enable: true,
+                  mode: 'push'
+                },
+                onHover: {
+                  enable: true,
+                  mode: 'repulse'
+                },
+                resize: true
+              },
+              modes: {
+                bubble: {
+                  distance: 400,
+                  duration: 2,
+                  opacity: 0.8,
+                  size: 40
+                },
+                push: {
+                  quantity: 4
+                },
+                repulse: {
+                  distance: 200,
+                  duration: 0.4
+                }
+              }
+            },
+            particles: {
+              color: {
+                value: '#F6F6F4'
+              },
+              links: {
+                color: '#F6F6F4',
+                distance: 150,
+                enable: true,
+                opacity: 0.5,
+                width: 1
+              },
+              collisions: {
+                enable: true
+              },
+              move: {
+                direction: 'none',
+                enable: true,
+                outMode: 'bounce',
+                random: false,
+                speed: 2,
+                straight: false
+              },
+              number: {
+                density: {
+                  enable: true,
+                  value_area: 800
+                },
+                value: 80
+              },
+              opacity: {
+                value: 1
+              },
+              shape: {
+                type: 'circle'
+              },
+              size: {
+                random: true,
+                value: 5
+              }
+            },
+            detectRetina: true
+          }}
+        />
       </section>
       {/* App */}
       <section className="flex items-center justify-center h-auto py-12 text-left bg-white">
         <div className={centered}>
           <div className="w-full p-4 md:p-8 border-2 border-gray-100 text-gray-600">
+            <h2 className="font-medium text-3xl mb-4 text-black">Yield Protocol Live Rates</h2>
             {!isLoading && seriesArray && seriesArray[0] ? (
               <div className="block">
                 {seriesArray.map((series, index) => (
@@ -554,8 +501,9 @@ const IndexPage = props => {
                   >
                     <div className="flex justify-start text-lg items-center w-full md:w-auto mb-4 md:mb-0">
                       <img className="w-6 h-6 rounded-full mr-4" src="img/dai.svg" />
-                      <strong className="mr-2 text-black">{series.apr}</strong>
-                      <p>{series.date}</p>
+                      <strong className="mr-2 text-black">
+                        {series.apr} APR, {series.date} Series
+                      </strong>
                     </div>
                     <div className="right">
                       <a
@@ -563,6 +511,13 @@ const IndexPage = props => {
                         disabled={isDisabled}
                         href={`//app.yield.is/#/borrow/${series.value}`}
                         target="_blank"
+                        onClick={() =>
+                          logEvent({
+                            category: 'Landing Page',
+                            action: 'Borrow',
+                            label: amount ? amount : null
+                          })
+                        }
                       >
                         Borrow
                       </a>
@@ -571,6 +526,13 @@ const IndexPage = props => {
                         disabled={isDisabled}
                         href={`//app.yield.is/#/lend/${series.value}`}
                         target="_blank"
+                        onClick={() =>
+                          logEvent({
+                            category: 'Landing Page',
+                            action: 'Lend',
+                            label: amount ? amount : null
+                          })
+                        }
                       >
                         Lend
                       </a>
@@ -603,21 +565,18 @@ const IndexPage = props => {
         <div className={centered}>
           <h3 className="font-medium text-2xl mb-8">{page.backersHeading}</h3>
           <div className="w-full relative inline-block">
-            <div className="flex flex-col md:flex-row justify-start items-center">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
               {page.backers &&
                 page.backers.map((backer, index) => (
                   <img
-                    className={`h-8 ${
-                      index === page.backers.length - 1 ? 'mb-0 md:mr-0' : 'mb-4 md:mr-6'
+                    className={`w-full fit ${
+                      index === page.backers.length - 1 ? 'mb-4 md:mr-0' : 'mb-4 md:mr-6'
                     }`}
                     key={`backer-${index}`}
                     src={imageUrlFor(buildImageObj(backer))}
                   />
                 ))}
             </div>
-          </div>
-          <div className="flex flex-col md:flex-row w-full">
-            <p>Mariano Conti from Maker, Seb &amp; Suhail from Zapper</p>
           </div>
         </div>
       </section>
@@ -662,6 +621,33 @@ const IndexPage = props => {
                   </div>
                 ))
               : null}
+          </div>
+        </div>
+      </section>
+      {/* Community */}
+      <section className="flex py-12 bg-white community">
+        <div className={centered}>
+          <h5 className="font-medium text-2xl mb-4">Join our community</h5>
+          <p className="w-full text-gray-600 mb-8">
+            Chat with us and others in the community to learn more about Yield Protocol.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {socials &&
+              socials.map((social, index) => (
+                <a
+                  className="w-full bg-offwhite hover:bg-gray-100 p-8 text-black text-center"
+                  href={social.url}
+                  target="_blank"
+                  key={`social-${index}`}
+                >
+                  <img
+                    className="w-6 h-6 mx-auto mb-4"
+                    key={`person-${index}`}
+                    src={imageUrlFor(buildImageObj(social.image))}
+                  />
+                  <span>{social.title}</span>
+                </a>
+              ))}
           </div>
         </div>
       </section>

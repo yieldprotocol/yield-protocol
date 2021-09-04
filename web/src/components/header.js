@@ -11,7 +11,7 @@ const Header = class extends React.Component {
 
     this.state = {
       menuOpen: false,
-      isTop: false,
+      isTop: false
     }
 
     this.isTopChecker = this.isTopChecker.bind(this)
@@ -44,27 +44,27 @@ const Header = class extends React.Component {
     const links = [
       {
         link: '//app.yield.is/#/borrow/',
-        title: 'Borrow',
+        title: 'Borrow'
       },
       {
         link: '//app.yield.is/#/lend/',
-        title: 'Lend',
+        title: 'Lend'
       },
       {
         link: '//app.yield.is/#/pool/',
-        title: 'Provide Liquidity',
+        title: 'Provide Liquidity'
       },
       {
         link: '//docs.yield.is/',
-        title: 'Docs',
-      },
+        title: 'Docs'
+      }
     ]
 
     return (
       <nav
         aria-label="main-navigation"
         className={`navbar inline-block fixed w-full left-0 top-0 z-20 border-none font-display ${
-          this.state.isTop ? `py-8` : `py-4`
+          this.state.isTop ? `bg-transparent py-8` : `bg-white py-4`
         }`}
         role="navigation"
       >
@@ -74,7 +74,7 @@ const Header = class extends React.Component {
             <div className="flex w-auto justify-start items-center">
               <Logo company={company} />
               <div className="text-right md:text-center w-full md:w-auto">
-                {links.map((item) => (
+                {links.map(item => (
                   <a
                     className={linkClass}
                     href={item.link}
