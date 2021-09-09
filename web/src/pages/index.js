@@ -445,10 +445,10 @@ const IndexPage = props => {
             },
             particles: {
               color: {
-                value: '#F6F6F4'
+                value: '#eee'
               },
               links: {
-                color: '#F6F6F4',
+                color: '#eee',
                 distance: 150,
                 enable: true,
                 opacity: 0.5,
