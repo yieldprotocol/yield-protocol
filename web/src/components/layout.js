@@ -29,7 +29,7 @@ class Layout extends React.Component {
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'center center',
               backgroundAttachment: 'fixed',
-              backgroundSize: 'cover',
+              backgroundSize: 'cover'
             }}
           ></div>
         ) : null}

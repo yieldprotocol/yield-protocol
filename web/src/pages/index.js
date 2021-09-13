@@ -591,6 +591,7 @@ const IndexPage = props => {
                     className={`inline-block w-full text-left ${
                       index === people.edges.length - 1 ? 'mb-0' : 'mb-4'
                     }`}
+                    key={`team-${index}`}
                   >
                     <img
                       className="w-full h-64 object-cover mb-3"
@@ -607,13 +608,13 @@ const IndexPage = props => {
                           className="flex items-center justify-start mr-4"
                           href={person.node.twitter}
                         >
-                          <img class="h-4 mr-2" src="/social/twitter.svg" />
+                          <img className="h-4 mr-2" src="/social/twitter.svg" />
                           Twitter
                         </a>
                       ) : null}
                       {person.node.linkedin ? (
                         <a className="flex items-center justify-start" href={person.node.linkedin}>
-                          <img class="h-4 mr-2" src="/social/linkedin.svg" />
+                          <img className="h-4 mr-2" src="/social/linkedin.svg" />
                           LinkedIn
                         </a>
                       ) : null}
