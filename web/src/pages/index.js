@@ -126,7 +126,7 @@ export const query = graphql`
     }
 
     people: allSanityPerson(
-      sort: { fields: _updatedAt }
+      sort: { fields: _createdAt }
       filter: { slug: { current: { ne: null } } }
     ) {
       edges {
