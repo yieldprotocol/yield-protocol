@@ -357,13 +357,13 @@ const IndexPage = props => {
 
   const ForComponent = ({ header, array, className }) => {
     return (
-      <div className={`p-8 md:p-16 w-full ${className}`}>
+      <div className={`p-8 md:p-16 w-full text-center ${className}`}>
         <h3 className="inline-block w-full font-medium text-2xl md:text-3xl mb-4">{header}</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {array &&
             array.map((object, index) => (
               <div className="bg-gray-800 p-4 w-full font-normal" key={index}>
-                <div className="flex justify-start items-center w-10 h-10 rounded-full bg-offwhite p-2 mb-4 md:mr-4">
+                <div className="flex justify-start items-center w-16 h-16 rounded-full bg-offwhite p-3 mb-6 mx-auto">
                   <img className="w-full" src={imageUrlFor(buildImageObj(object.image))} />
                 </div>
                 <strong className="inline-block w-full font-bold font-medium text-lg mb-2">
