@@ -79,7 +79,7 @@ function SEO({ description, image, lang, meta, keywords = [], title, url }) {
               },
               {
                 href:
-                  'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600&display=swap',
+                  'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap',
                 rel: 'stylesheet'
               },
               {
