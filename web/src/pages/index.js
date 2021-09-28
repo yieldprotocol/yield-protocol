@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { graphql } from 'gatsby'
-import Particles from 'react-tsparticles'
 
 // Libs
 import { buildImageObj } from '../lib/helpers'
@@ -8,6 +7,7 @@ import { imageUrlFor } from '../lib/image-url'
 
 // Components
 import GraphQLErrorList from '../components/graphql-error-list'
+import Background from '../components/background'
 import Button from '../components/button'
 import SEO from '../components/seo'
 
@@ -392,100 +392,20 @@ const IndexPage = props => {
       />
 
       {/* Hero */}
-      <section className="hero flex items-center justify-center h-screen text-left md:text-center bg-offwhite">
+      <section className="hero flex flex-col md:flex-row items-center justify-center h-auto md:h-screen text-left bg-transparent">
         <div
-          className={`relative ${centered}`}
+          className={`relative mt-24 md:mt-0 mb-8 md:mb-0 px-0 md:px-12 ${centered}`}
           style={{
             zIndex: 1
           }}
         >
-          <h1 className="font-medium text-5xl mb-4">{page.heading}</h1>
+          <h1 className="font-medium text-3xl md:text-5xl mb-4">{page.heading}</h1>
           <p className="text-gray-600 mb-8">{page.body}</p>
           {page.ctaPrimary ? (
             <Button external primary text={page.ctaPrimary} type="button" to={page.ctaPrimaryURL} />
           ) : null}
         </div>
-        <Particles
-          className="absolute w-full h-full bottom-0 right-0 left-0 top-0 z-0"
-          options={{
-            background: {
-              color: {
-                value: '#FFF'
-              }
-            },
-            fpsLimit: 60,
-            interactivity: {
-              detectsOn: 'canvas',
-              events: {
-                onClick: {
-                  enable: true,
-                  mode: 'push'
-                },
-                onHover: {
-                  enable: true,
-                  mode: 'repulse'
-                },
-                resize: true
-              },
-              modes: {
-                bubble: {
-                  distance: 400,
-                  duration: 2,
-                  opacity: 0.8,
-                  size: 40
-                },
-                push: {
-                  quantity: 4
-                },
-                repulse: {
-                  distance: 200,
-                  duration: 0.4
-                }
-              }
-            },
-            particles: {
-              color: {
-                value: '#eee'
-              },
-              links: {
-                color: '#eee',
-                distance: 150,
-                enable: true,
-                opacity: 0.5,
-                width: 1
-              },
-              collisions: {
-                enable: true
-              },
-              move: {
-                direction: 'none',
-                enable: true,
-                outMode: 'bounce',
-                random: false,
-                speed: 2,
-                straight: false
-              },
-              number: {
-                density: {
-                  enable: true,
-                  value_area: 800
-                },
-                value: 80
-              },
-              opacity: {
-                value: 1
-              },
-              shape: {
-                type: 'circle'
-              },
-              size: {
-                random: true,
-                value: 5
-              }
-            },
-            detectRetina: true
-          }}
-        />
+        <Background />
       </section>
       {/* App */}
       <section className="flex items-center justify-center h-auto py-12 text-left bg-white">

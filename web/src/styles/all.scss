@@ -228,3 +228,34 @@ figure {
     padding: 2rem;
   }
 }
+
+$d: 50vmin;
+
+#logo {
+  display: grid;
+}
+
+.logo-lyr {
+  grid-area: 1/ 1;
+  place-self: center;
+  width: $d;
+  height: $d;
+
+  .js & {
+    mix-blend-mode: screen;
+  }
+}
+
+#logo-img {
+  background: white;
+}
+
+html:not(.js) #logo-img {
+  animation: img-fade-in 1s ease-out 2s backwards;
+}
+
+@keyframes img-fade-in {
+  0% {
+    opacity: 0;
+  }
+}
