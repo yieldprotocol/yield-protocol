@@ -57,7 +57,11 @@ const Header = class extends React.Component {
       {
         link: '//docs.yield.is/',
         title: 'Docs'
-      }
+      },
+      {
+        link: '//app.yield.is/',
+        title: 'V1'
+      },
     ]
 
     return (
