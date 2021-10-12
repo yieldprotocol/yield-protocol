@@ -5,7 +5,7 @@ import Container from '../components/container'
 import Logo from '../components/logo'
 import SEO from '../components/seo'
 
-// import Layout from '../containers/layout'
+import Layout from '../containers/layout'
 
 const classLinks =
   'flex justify-start items-center w-auto font-normal text-sm inherit mb-2 md:mb-0 mr-0 md:mr-8 link py-1'
@@ -84,7 +84,7 @@ const LinkComponent = ({ title, list }) =>
   )
 
 const NotFoundPage = () => (
-  <>
+  <Layout hideHeader hideFooter>
     <SEO title="Yield Protocol" />
     <header className="flex align-middle justify-center p-8 text-center fixed top-0 bg-transparent w-full">
       <Logo company="Yield Protocol" margin="m-0" />
@@ -105,7 +105,7 @@ const NotFoundPage = () => (
         <Background />
       </div>
     </Container>
-  </>
+  </Layout>
 )
 
 export default NotFoundPage
