@@ -92,8 +92,8 @@ const NotFoundPage = () => (
     <Container>
       <div className="flex align-middle justify-center h-screen w-full py-24 md:py-48 text-center relative z-10">
         <div className="flex flex-col align-middle justify-center w-full max-w-3xl">
-          <h1 className="text-2xl lg:text-5xl font-semibold">Launching soon</h1>
-          <h2 className="text-sm lg:text-xl text-gray-600 mb-8">We'll be live with V2 soon!</h2>
+          <h1 className="text-2xl lg:text-5xl font-semibold">Yield Protocol</h1>
+          <h2 className="text-sm lg:text-xl text-gray-600 mb-8">We'll be live with Yield Protocol Version 2 soon!</h2>
           <div className="flex flex-col md:flex-row items-center justify-center w-full text-center">
             {footerLinks.map((object, index) => (
               <LinkComponent title={object.title} list={object.list} key={index} />
