@@ -18,14 +18,9 @@ const Background = props => {
       LA = Object.entries({
         'Wrapped Bitcoin': 'https://cryptologos.cc/logos/wrapped-bitcoin-wbtc-logo.png',
         Ethereum: 'https://cryptologos.cc/logos/ethereum-eth-logo.png',
-        Dai: 'https://www.bitprime.co.nz/wp-content/uploads/2020/02/dai200.png',
+        Dai: '/img/dai.png',
         'USD Coin': 'https://cryptologos.cc/logos/usd-coin-usdc-logo.png?v=013',
-        ChainLink: 'https://cryptologos.cc/logos/chainlink-link-logo.png?v=013',
-        Uniswap: 'https://cryptologos.cc/logos/uniswap-uni-logo.png?v=013',
-        Aave: 'https://cryptologos.cc/logos/aave-aave-logo.png?v=013',
-        Compound: 'https://cryptologos.cc/logos/compound-comp-logo.png?v=013',
-        'Lido Staked Ether':
-          'https://assets.coingecko.com/coins/images/13442/large/steth_logo.png?1608607546'
+        Yield: '/img/yield.png'
       }) /* array of logos */,
       NL = LA.length /* number of logos */,
       _L = logoRef.current /* logo image element */,
