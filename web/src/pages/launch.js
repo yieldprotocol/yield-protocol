@@ -24,7 +24,7 @@ const socials = [
   {
     title: 'Github',
     image: '/social/github-black.svg',
-    url: 'https://github.com/yield-protocol'
+    url: 'https://github.com/yieldprotocol'
   },
   {
     title: 'Discord',
