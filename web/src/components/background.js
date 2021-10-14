@@ -23,7 +23,7 @@ const Background = props => {
         Yield: '/img/yield.png'
       }) /* array of logos */,
       NL = LA.length /* number of logos */,
-      _L = logoRef.current /* logo image element */,
+      _L = document.getElementById('logo-img') /* logo image element */,
       TFN = {
         linear: function(k) {
           return k
@@ -136,7 +136,13 @@ const Background = props => {
             this.oy = k * this.fy + ck * this.iy
 
             this.f = +(this.f + 1 / PD.sint).toFixed(PD.prec)
-          } else if (this.t > 2 * (PD.sint + PD.aint)) this.a--
+          } else {
+            if (this.ox !== this.fx) {
+              this.ox = this.fx
+              this.oy = this.fy
+            }
+            if (this.t > 2 * PD.sint + 2 * PD.aint) this.a--
+          }
 
           /* update polygon rotation */
           this.φ += this.ψ
@@ -189,7 +195,7 @@ const Background = props => {
         }
 
         /* update max alpha to be found among all polygons, 
-    so we reduce the number of alpha buckets we loop through if possible */
+			so we reduce the number of alpha buckets we loop through if possible */
         PD.amax = amax
         rID = requestAnimationFrame(draw) /* move to next animation iteration */
       } else if (!hidden.length) {
@@ -229,8 +235,8 @@ const Background = props => {
 
       PD.pnum = Math.pow(PD.enum, 2) /* total number of polygons drawn */
       PD.cell = CD.dim / PD.enum /* cell size */
-      PD.sint = 250 /* number of motion/ scaling intervals */
-      PD.aint = 100 /* number of alpha intervals (buckets) */
+      PD.sint = 150 /* number of motion/ scaling intervals */
+      PD.aint = 64 /* number of alpha intervals (buckets) */
       PD.amax = PD.aint /* max alpha bucket index */
 
       CD.ctx.translate(-CD.off, -CD.off) /* put 0,0 point in the middle */
