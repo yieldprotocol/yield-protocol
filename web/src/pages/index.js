@@ -15,7 +15,7 @@ import SEO from '../components/seo'
 import Layout from '../containers/layout'
 
 // Pool
-import Pool from '../contracts/pool.json'
+import Pool from '../contracts/pool-v2.json'
 
 // Utils
 import { logEvent } from '../utils/analytics'
@@ -30,35 +30,60 @@ const fyDai = [
   'function redeem(address, address, uint256)'
 ]
 
-const classLinks =
-  'flex justify-items-start items-center flex-row align-middle w-full font-normal inherit text-base mb-2 md:mb-0 mr-0 md:mr-8 link py-1'
-
-const borrow = {
-  heading: 'Borrow today & pay fixed interest.',
-  type: 'borrow',
-  cta: 'Borrow'
-}
-
-const lend = {
-  heading: 'Lend today & earn fixed interest.',
-  type: 'lend',
-  cta: 'Lend'
-}
-
 const series = [
   {
-    address: '0x8EcC94a91b5CF03927f5eb8c60ABbDf48F82b0b3',
-    value: '1633046399',
-    label: 'September 2021',
-    date: 'September 2021',
-    apr: 2.84
+    address: '0xeCc2cB297e039f34a62b0a314a1C67121d58B07c',
+    label: 'Dec 2021',
+    date: 'Dec 2021',
+    value: '1640995199',
+    name: 'Yield FYDAI2112 LP Token',
+    type: 'DAI',
+    apr: 0
   },
   {
-    address: '0x5591f644B377eD784e558D4BE1bbA78f5a26bdCd',
+    address: '0x792F187521fA24e35440BF8a7Db76f9ee0E719ee',
+    label: 'Mar 2022',
+    date: 'Mar 2022',
+    value: '1648771199',
+    name: 'Yield FYDAI2203 LP Token',
+    type: 'DAI',
+    apr: 0
+  },
+  {
+    address: '0xE77339Cd02eDf4Ec6d030dAE6CB1725cEA70b652',
+    label: 'Jun 2022',
+    date: 'Jun 2022',
+    value: '1656036000',
+    name: 'Yield FYDAI2206 LP Token',
+    type: 'DAI',
+    apr: 0
+  },
+  {
+    address: '0xC7d9E66D34f7C743E9C46Cb6b386D32719477330',
+    label: 'Dec 2021',
+    date: 'Dec 2021',
     value: '1640995199',
-    label: 'December 2021',
-    date: 'December 2021',
-    apr: 3.84
+    name: 'Yield FYUSDC2112 LP Token',
+    type: 'USDC',
+    apr: 0
+  },
+  {
+    address: '0x3994729c74ea858D3F756744D76f7D4E4Cd39969',
+    label: 'Mar 2022',
+    date: 'Mar 2022',
+    value: '1648771199',
+    name: 'Yield FYUSDC2203 LP Token',
+    type: 'USDC',
+    apr: 0
+  },
+  {
+    address: '0x4fc50Fb7EEf73b8bD7262B7eC4E6801234D8e742',
+    label: 'Jun 2022',
+    date: 'Jun 2022',
+    value: '1656036000',
+    name: 'Yield FYUSDC2206 LP Token',
+    type: 'USDC',
+    apr: 0
   }
 ]
 
@@ -203,7 +228,13 @@ const IndexPage = props => {
       ethers = require('ethers')
 
       // Default provider (homestead = mainnet)
-      provider = ethers.getDefaultProvider('homestead', {
+      // You can use any standard network name
+      //  - "homestead"
+      //  - "rinkeby"
+      //  - "ropsten"
+      //  - "kovan"
+      //  - "goerli"
+      provider = ethers.getDefaultProvider('kovan', {
         etherscan: process.env.GATSBY_ETHERSCAN_API_KEY,
         infura: process.env.GATSBY_INFURA_PROJECT_ID,
         alchemy: process.env.GATSBY_ALCHEMY_API_KEY
@@ -220,9 +251,10 @@ const IndexPage = props => {
   const _getRates = async series => {
     const ratesData = await Promise.allSettled(
       series.map(async x => {
+        console.log({ x })
         const contract = new ethers.Contract(x.address, Pool.abi, provider)
-
         const fyDaiAddress = await contract.fyDai()
+        console.log({ fyDaiAddress })
         const fyDaiContract = new ethers.Contract(fyDaiAddress, fyDai, provider)
         const fyDaiMaturity = await fyDaiContract.maturity()
         const parsedfyDaiMaturity = new Date(parseInt(fyDaiMaturity.toString()) * 1000)
@@ -232,7 +264,8 @@ const IndexPage = props => {
           ? amount
           : ethers.utils.parseEther(amount.toString())
 
-        const preview = await contract.sellFYDaiPreview(parsedAmount)
+        const preview = await contract.sellFYTokenPreview(parsedAmount)
+        console.log({ preview })
 
         const inEther = ethers.utils.formatEther(preview.toString())
         const object = {
@@ -248,6 +281,8 @@ const IndexPage = props => {
     const filteredRates = ratesData.filter(p => {
       return p.status === 'fulfilled'
     })
+
+    console.log({ ratesData, filteredRates })
 
     /* update context state and return */
     dispatch({ type: 'updateRates', payload: filteredRates })
@@ -275,6 +310,7 @@ const IndexPage = props => {
   // Update list
   const updateSeries = async () => {
     const rates = await _getRates(series)
+    console.log({ rates })
     if (rates && rates.length > 0) {
       rates.map(object => {
         const getAPR = yieldAPR(
@@ -306,28 +342,16 @@ const IndexPage = props => {
   useEffect(() => {
     // Set mounted
     let isMounted = true
-    // Set var for timer
-    let timer
     // Get these imports if browser
-    getImports()
-    // Get series rates and update
-    updateSeries().then(() => {
-      if (isMounted) {
-        // Timer
-        if (selectRef && selectRef.current && selectRef.current.select) {
-          timer = setTimeout(
-            () => selectRef && selectRef.current && selectRef.current.select.focus(),
-            25
-          )
+    getImports().then(() => {
+      // Get series rates and update
+      updateSeries().then(() => {
+        if (isMounted) {
+          setIsDisabled(false)
+          setIsLoading(false)
         }
-        setIsLoading(false)
-      }
+      })
     })
-    // this will clear Timeout when component unmount like in willComponentUnmount
-    return () => {
-      clearTimeout(timer)
-      isMounted = false
-    }
   }, [])
 
   if (errors) {
@@ -420,7 +444,11 @@ const IndexPage = props => {
                     key={`series-${index}`}
                   >
                     <div className="flex justify-start text-lg items-center w-full md:w-auto mb-4 md:mb-0">
-                      <img className="w-6 h-6 rounded-full mr-4" src="img/dai.svg" />
+                      {series.type === 'DAI' ? (
+                        <img className="w-6 h-6 rounded-full mr-4" src="img/dai.svg" />
+                      ) : (
+                        <img className="w-6 h-6 rounded-full mr-4" src="img/usdc.svg" />
+                      )}
                       <strong className="mr-2 text-black">
                         {series.apr} APR, {series.date} Series
                       </strong>
