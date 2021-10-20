@@ -4,3 +4,8 @@
 [build.environment]
   NODE_ENV = "staging"
   NODE_VERSION = "12.16.2"
+[[redirects]]
+  from = "/"
+  to = "/launch"
+  status = 301
+  force = true

@@ -82,12 +82,20 @@ const Footer = class extends React.Component {
     return (
       <footer className="footer inline-block w-full py-6 px-5 md:px-12 relative text-xs text-gray-600">
         <div className="flex flex-col md:flex-row justify-start md:justify-between items-center w-full">
-          <div className="flex flex-col md:flex-row items-center w-full md:w-auto">
+          <div className="flex flex-col md:flex-row items-center w-full md:w-auto mb-1 md:mb-0">
             {footerLinks.map((object, index) => (
               <LinkComponent title={object.title} list={object.list} key={index} />
             ))}
           </div>
-          <p className="w-full md:w-auto text-gray-400">&copy; {new Date().getFullYear()}</p>
+          <div className="flex flex-col md:flex-row w-full md:w-auto text-left md:text-right justify-start md:justify-end gap-4">
+            <Link to="/privacy">
+              Privacy
+            </Link>
+            <Link to="/terms">
+              Terms
+            </Link>
+            <p className="text-gray-400">&copy; {new Date().getFullYear()}</p>
+          </div>
         </div>
       </footer>
     )

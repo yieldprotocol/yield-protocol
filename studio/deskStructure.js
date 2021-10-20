@@ -57,7 +57,11 @@ export default () =>
         .schemaType("career")
         .child(S.documentTypeList("career").title("Careers")),
       S.listItem()
-        .title("Pages")
+        .title("General Pages")
+        .schemaType("paper")
+        .child(S.documentTypeList("page").title("General Pages")),
+      S.listItem()
+        .title("Custom Pages")
         .child(
           S.list()
             .title("Pages")

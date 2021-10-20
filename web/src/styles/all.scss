@@ -258,3 +258,14 @@ html:not(.js) #logo-img {
     opacity: 0;
   }
 }
+
+.block-text {
+  p {
+    margin-bottom: 1rem;
+  }
+
+  a {
+    text-decoration: underline;
+    font-weight: 500;
+  }
+}
