@@ -432,7 +432,7 @@ const IndexPage = props => {
         <Background />
       </section>
       {/* App */}
-      <section className="flex items-center justify-center h-auto py-12 text-left bg-white">
+      {/* <section className="flex items-center justify-center h-auto py-12 text-left bg-white">
         <div className={centered}>
           <div className="w-full p-4 md:p-8 border-2 border-gray-100 text-gray-600">
             <h2 className="font-medium text-3xl mb-4 text-black">Yield Protocol Live Rates</h2>
@@ -497,7 +497,7 @@ const IndexPage = props => {
             )}
           </div>
         </div>
-      </section>
+      </section> */}
       {/* Value props */}
       <section className="flex py-0 md:py-12">
         <div className="flex flex-col md:flex-row justify-between w-full max-w-6xl mx-auto">

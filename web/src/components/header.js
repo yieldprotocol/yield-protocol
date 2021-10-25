@@ -37,21 +37,21 @@ const Header = class extends React.Component {
 
     const RightNav = () => (
       <div className="relative w-auto tl tr-l">
-        <Button external primary text="Use app" to="https://app.yield.is" />
+        <Button external primary text="Use app" to="https://app.yieldprotocol.com/" />
       </div>
     )
 
     const links = [
       {
-        link: '//app.yield.is/#/borrow/',
+        link: '//app.yieldprotocol.com/#/borrow',
         title: 'Borrow'
       },
       {
-        link: '//app.yield.is/#/lend/',
+        link: '//app.yieldprotocol.com/#/lend',
         title: 'Lend'
       },
       {
-        link: '//app.yield.is/#/pool/',
+        link: '//app.yieldprotocol.com/#/pool',
         title: 'Provide Liquidity'
       },
       {
