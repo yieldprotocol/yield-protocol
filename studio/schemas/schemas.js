@@ -8,6 +8,7 @@ import schemaTypes from "all:part:@sanity/base/schema-type";
 import about from "./about";
 import blockContent from "./blockContent";
 import blockText from "./blockText";
+import careers from "./careers";
 import career from "./career";
 import category from "./category";
 import companyInfo from "./companyInfo";
@@ -40,6 +41,7 @@ export default createSchema({
     about,
     blockContent,
     blockText,
+    careers,
     career,
     category,
     companyInfo,

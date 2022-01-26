@@ -6,7 +6,7 @@ import { ArrowUpRight, X } from 'react-feather'
 import BlockContent from './block-content'
 import Button from './button'
 
-const ParagraphClass = 'inline-block relative w-full text-sm md:text-base text-gray-200 mb-4'
+const ParagraphClass = 'inline-block relative w-full text-sm md:text-base text-gray-900 mb-4'
 
 if (typeof window !== 'undefined') {
   Modal.setAppElement('body')
@@ -58,12 +58,12 @@ class Careers extends React.Component {
             <X className="h-full w-full relative" color="white" />
           </button>
           {listing ? (
-            <div className="inline-block relative w-full text-white">
+            <div className="inline-block relative w-full text-gray-700">
               {listing.title ? (
-                <h2 className="font-bold text-xl md:text-3xl text-white">{listing.title}</h2>
+                <h2 className="font-bold text-xl md:text-3xl text-gray-900">{listing.title}</h2>
               ) : null}
               {listing.publishedAt ? (
-                <small className="inline-block relative w-full text-gray-400 text-sm my-4 md:my-6">
+                <small className="inline-block relative w-full text-gray-500 text-sm my-4 md:my-6">
                   Posted on:{' '}
                   {differenceInDays(new Date(listing.publishedAt), new Date()) > 3
                     ? distanceInWords(new Date(listing.publishedAt), new Date())
@@ -76,7 +76,7 @@ class Careers extends React.Component {
                 </div>
               ) : null}
               <a
-                className="block text-center rounded-lg border-2 border-solid border-indigo-700 bg-indigo-700 text-white font-bold px-4 py-2 w-full"
+                className="block text-center border-2 border-solid border-black bg-black text-white font-bold px-4 py-2 w-full"
                 target="_blank"
                 href={
                   listing.apply
@@ -113,7 +113,7 @@ class Careers extends React.Component {
                 </div>
                 <div className="flex items-center justify-start md:justify-end">
                   <button
-                    className="inline-flex items-center text-center rounded-lg border-2 border-solid border-white bg-transparent text-white px-2 md:px-4 py-1 md:py-2 font-bold hover:bg-indigo-700 mr-4"
+                    className="inline-flex items-center text-center border-2 border-solid border-black bg-transparent text-black px-2 md:px-3 py-1 md:py-2 font-bold hover:bg-gray-100 mr-4"
                     onClick={() => this.openModal(career)}
                   >
                     View

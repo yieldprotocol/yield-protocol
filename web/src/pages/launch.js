@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'gatsby'
 
 import Background from '../components/background'
 import Container from '../components/container'
@@ -45,34 +46,14 @@ const footerLinks = [
       }
     })
   }
-  // {
-  //   title: 'Resources',
-  //   list: [
-  //     {
-  //       external: true,
-  //       title: 'Blog',
-  //       link: 'https://medium.com/yield-protocol'
-  //     },
-  //     {
-  //       external: true,
-  //       title: 'White paper',
-  //       link: '/Yield.pdf'
-  //     },
-  //     {
-  //       external: true,
-  //       title: 'YieldSpace Paper',
-  //       link: '/YieldSpace.pdf'
-  //     }
-  //   ]
-  // }
 ]
 
 const LinkComponent = ({ title, list }) =>
   list.map((item, index) =>
     item.external ? (
-      <a className={classLinks} target="_blank" href={item.link} key={`link-external-${index}`}>
+      <a className={classLinks} target="_blank" href={item.link} key={`link-external-${index}`} rel="noopener noreferrer">
         {item.image ? (
-          <img className="inline-block align-middle mr-2 h-4 w-4 contain" src={item.image} />
+          <img className="inline-block align-middle mr-2 h-4 w-4 contain" src={item.image} alt={item.title || 'Link'} />
         ) : null}{' '}
         {item.title} {item.cta}
       </a>

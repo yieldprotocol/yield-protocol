@@ -4,6 +4,7 @@ import { FaFile } from "react-icons/fa";
 
 const hiddenTypes = [
   "about",
+  "careers",
   "career",
   "category",
   "companyInfo",
@@ -19,7 +20,7 @@ const hiddenTypes = [
   "stories",
   "story",
   "siteSettings",
-  "value"
+  "value",
 ];
 
 export default () =>
@@ -74,7 +75,16 @@ export default () =>
                     .schemaType("home")
                     .documentId("home")
                 )
-                .icon(FaFile)
+                .icon(FaFile),
+                S.listItem()
+                .title("Careers")
+                .child(
+                  S.editor()
+                    .id("careersPage")
+                    .schemaType("careers")
+                    .documentId("careers")
+                )
+                .icon(FaFile),
             ])
         ),
       S.listItem()
@@ -85,5 +95,7 @@ export default () =>
         .title("Categories")
         .schemaType("category")
         .child(S.documentTypeList("category").title("Categories")),
-      ...S.documentTypeListItems().filter(listItem => !hiddenTypes.includes(listItem.getId()))
+      ...S.documentTypeListItems().filter(
+        (listItem) => !hiddenTypes.includes(listItem.getId())
+      ),
     ]);

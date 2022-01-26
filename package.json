@@ -3,9 +3,6 @@
   "name": "yield-protocol",
   "version": "0.0.1",
   "author": "Rishabh Varshney <it.is.rishabh@gmail.com>",
-  "engines": {
-    "node": "12.16.2"
-  },
   "scripts": {
     "clean": "lerna clean",
     "deploy": "lerna run deploy",

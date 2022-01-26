@@ -42,6 +42,11 @@ const Footer = class extends React.Component {
         title: 'Resources',
         list: [
           {
+            external: false,
+            title: 'Careers',
+            link: '/careers',
+          },
+          {
             external: true,
             title: 'Blog',
             link: 'https://medium.com/yield-protocol',
