@@ -55,7 +55,7 @@ const Header = class extends React.Component {
         title: 'Provide Liquidity'
       },
       {
-        link: '//docs.yield.is/',
+        link: '//docs.yieldprotocol.com/',
         title: 'Docs'
       },
       {
