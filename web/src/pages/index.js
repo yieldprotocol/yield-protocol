@@ -534,7 +534,7 @@ const IndexPage = props => {
           <h4 className="font-medium text-2xl mb-8">Our team</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {people && people.edges
-              ? people.edges.map((person, index) => (
+              ? people.edges.slice(0,2).map((person, index) => (
                   <div
                     className={`inline-block w-full text-left ${
                       index === people.edges.length - 1 ? 'mb-0' : 'mb-4'
@@ -571,6 +571,48 @@ const IndexPage = props => {
                 ))
               : null}
           </div>
+
+          <h4 className="font-medium text-2xl mb-8">Contributors</h4>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {people && people.edges
+              ? people.edges.slice(3).map((person, index) => (
+                  <div
+                    className={`inline-block w-full text-left ${
+                      index === people.edges.length - 1 ? 'mb-0' : 'mb-4'
+                    }`}
+                    key={`team-${index}`}
+                  >
+                    <img
+                      className="w-full h-64 object-cover mb-3"
+                      key={`person-${index}`}
+                      src={imageUrlFor(buildImageObj(person.node.image))}
+                    />
+                    <strong className="inline-block w-full font-medium text-2xl">
+                      {person.node.name}
+                    </strong>
+                    <p className="inlie-block w-full text-sm mb-4">{person.node.title}</p>
+                    <div className="socials flex flex-row items-center justify-start text-sm text-gray-600 w-full">
+                      {person.node.twitter ? (
+                        <a
+                          className="flex items-center justify-start mr-4"
+                          href={person.node.twitter}
+                        >
+                          <img className="h-4 mr-2" src="/social/twitter.svg" />
+                          Twitter
+                        </a>
+                      ) : null}
+                      {person.node.linkedin ? (
+                        <a className="flex items-center justify-start" href={person.node.linkedin}>
+                          <img className="h-4 mr-2" src="/social/linkedin.svg" />
+                          LinkedIn
+                        </a>
+                      ) : null}
+                    </div>
+                  </div>
+                ))
+              : null}
+          </div>
+
         </div>
       </section>
       {/* Community */}
