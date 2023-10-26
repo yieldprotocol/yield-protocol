@@ -534,7 +534,7 @@ const IndexPage = props => {
           <h4 className="font-medium text-2xl mb-8">Our team</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {people && people.edges
-              ? people.edges.slice(0,2).map((person, index) => (
+              ? people.edges.slice(0,3).map((person, index) => (
                   <div
                     className={`inline-block w-full text-left ${
                       index === people.edges.length - 1 ? 'mb-0' : 'mb-4'
